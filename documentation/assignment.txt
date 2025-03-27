@@ -1,0 +1,32 @@
+Assignment 1 
+Twitter from Temu 
+
+Let’s make a Twitter clone or parts of it, for non-political reasons. 
+
+Features 
+The website should mainly consume an API, which should support the following basic 
+features. 
+    • Post tweets 
+    • Edit tweets (?) 
+    • List tweets 
+    • Search for tweets 
+    • Search for hashtags 
+    • Make account 
+    • List accounts 
+    • Search for account 
+
+Architecture 
+The system should be split up in three levels: 
+    • User-interface level – Written in whatever you want 
+    • Processing level – REST API, using FastAPI or Flask, written Python 
+    • Data level – Relational database of your choice 
+
+Each of these should be its own service in Render. (You can use different service provides 
+if you want.) 
+1 
+
+The main point of this assignment is the API server, so the exact SQL-ing, the website 
+design quality and the correct use of JS frameworks are significantly less important. The 
+API-DB-system should be usable by other services than the web server. 
+The plan is for assignment 2 to build on this system (mainly API-server). Consider this 
+when making your system. The more extensible, the easier to continue later. 
