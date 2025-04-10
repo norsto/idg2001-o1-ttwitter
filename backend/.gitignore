@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+*.env
+
+# Local media files (for uploaded images/videos)
+app/media/
+
+# Alembic migration cache
+alembic/versions/*.pyc
+alembic/versions/__pycache__/
+
+# Database files (if any local SQLite or logs)
+*.db
+*.sqlite3
+
+# MyPy and Pytest cache
+.mypy_cache/
+.pytest_cache/
+
+# VSCode settings and other editor files
+.vscode/
+.idea/
+*.swp
+
+# Logs and misc
+*.log
+*.bak
+.DS_Store
