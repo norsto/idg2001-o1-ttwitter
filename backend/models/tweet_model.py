@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.database import Base
-from app.models.association import tweet_hashtag_table
+from backend.database import Base
+from .association_model import tweet_hashtag_table
 
 class Tweet(Base):
     __tablename__ = 'tweets'
