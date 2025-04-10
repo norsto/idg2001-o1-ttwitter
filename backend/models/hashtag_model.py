@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from app.database import Base
-from app.models.association import tweet_hashtag_table
+from backend.database import Base
+from .association_model import tweet_hashtag_table
 
 class Hashtag(Base):
     __tablename__ = 'hashtags'
