@@ -7,12 +7,12 @@ class AccountBase(BaseModel):
     email: str
 
 class AccountCreate(AccountBase):
-    tweets: Optional[List[str]] = [] # List of tweet IDs (e.g., ["1", "2", "3"])
+    password: str
 
 class AccountRead(AccountBase):
     id: int
     created_at: datetime
-    tweets: List[str] = [] # List of tweet IDs (e.g., ["1", "2", "3"])
+    tweets: List[int] = [] # List of tweet IDs (e.g., ["1", "2", "3"])
 
     class Config:
         orm_mode = True

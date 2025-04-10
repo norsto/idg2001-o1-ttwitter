@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
 class hashtagBase(BaseModel):
-    name: str
+    tag: str
 
 class hashtagCreate(hashtagBase):
-    
