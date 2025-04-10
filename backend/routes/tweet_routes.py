@@ -25,7 +25,7 @@ def get_tweet_content():
 
 @app.get("/api/:hashtags?")
 def get_hashtags():
-    return hashtags 
+    return #hashtags 
 
 
 

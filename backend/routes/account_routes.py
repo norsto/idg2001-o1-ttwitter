@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
-from app.database import SessionLocal
-from app.models import Account
-from app.schemas import AccountCreate
+from database import SessionLocal
+from models import Account
+from schemas import AccountCreate
 
 app = FastAPI()
 
@@ -31,11 +31,11 @@ def create_account(account_name: str, account_id: int):
 """
 @app.get("/api/accounts")
 def get_all_accounts():
-    return account
+    return #account
 
 @app.get("/api/accounts/{account_id}")
 def get_account(account_name: str):
-    return account[account_name]
+    return #account[account_name]
 
 @app.post("/api/{account_id}/tweets")
 def tweets(account_id: int):
