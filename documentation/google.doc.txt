@@ -1,0 +1,162 @@
+The website should mainly consume an API, which should support the following basic features. • Post tweets 
+POST /api/{account}/tweets
+• Edit tweets (?) 
+PATCH tweet  
+PATCH /api/{account}/tweets/{tweet_id}
+
+• List tweets 
+GET tweets
+GET /api/tweets
+
+• Search for tweets 
+GET tweets 
+GET /api/tweets?query=hello`
+
+• Search for hashtags 
+GET hashtags
+GET /api/:hashtags?tag=funnyHaha
+
+• Make account 
+POST account 
+POST /api/accounts
+
+• List accounts 
+GET accounts 
+GET /api/:accounts
+
+• Search for account 
+GET accounts
+GET /api/accounts/{id} 
+
+POST /api/accounts/login
+
+POST /api/accounts/register
+
+Architecture The system should be split up in three levels: 
+• User-interface level – Written in whatever you want 
+
+• Processing level – REST API, using FastAPI or Flask, written Python 
+	FastAPI
+
+• Data level – Relational database of your choice 
+
+
+
+Tech stack
+Database - MySQL
+Frontend - React
+API framework - FastAPI
+Azure - API and database service
+
+
+
+Ting:
+
+sqlalchemy – ORM
+
+pydantic – For request/response validation
+
+uvicorn – Dev server for FastAPI
+
+python-dotenv – For managing config vars
+
+mysql-connector-python – MySQL driver
+
+
+
+Models
+
+Account.py:
+	from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.orm import relationship
+from datetime import datetime
+from app.database import Base
+
+class Account(Base):
+    __tablename__ = 'accounts'
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String(50), unique=True, nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    tweets = relationship("Tweet", back_populates="account", cascade="all, delete")
+
+Tweet.py:
+from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+from datetime import datetime
+from app.database import Base
+from app.models.association import tweet_hashtag_table
+
+class Tweet(Base):
+    __tablename__ = 'tweets'
+
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    account_id = Column(Integer, ForeignKey('accounts.id'), nullable=False)
+    account = relationship("Account", back_populates="tweets")
+
+    hashtags = relationship(
+        "Hashtag",
+        secondary=tweet_hashtag_table,
+        back_populates="tweets"
+    )
+
+
+
+
+Hashtag.py:
+	from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+from app.database import Base
+from app.models.association import tweet_hashtag_table
+
+class Hashtag(Base):
+    __tablename__ = 'hashtags'
+
+    id = Column(Integer, primary_key=True, index=True)
+    tag = Column(String(50), unique=True, nullable=False)
+
+    tweets = relationship(
+        "Tweet",
+        secondary=tweet_hashtag_table,
+        back_populates="hashtags"
+    )
+
+
+association.py:
+from sqlalchemy import Table, Column, Integer, ForeignKey
+from app.database import Base
+
+tweet_hashtag_table = Table(
+    'tweet_hashtag',
+    Base.metadata,
+    Column('tweet_id', Integer, ForeignKey('tweets.id')),
+    Column('hashtag_id', Integer, ForeignKey('hashtags.id'))
+)
+
+
+Init.py:
+from app.models.account import Account
+from app.models.tweet import Tweet
+from app.models.hashtag import Hashtag
+from app.models.association import tweet_hashtag_table
+
+
+
+ROADMAP
+
+Seed database with dummy data 
+
+Make account
+
+List account
+
+tweets, search etc…
+
+Frontend
+
+Azure setup
