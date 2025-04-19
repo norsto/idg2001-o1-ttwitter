@@ -1,0 +1,95 @@
+@import '../../assets/global-styles/app.css';
+.feed {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  max-width: 40rem;
+  min-width: 30rem;
+  background-color: rgba(22, 22, 22, 0.3882352941);
+}
+.feed__post {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  padding: 1rem;
+  padding-bottom: 0.5rem;
+}
+.feed__post__form {
+  width: 100%;
+}
+.feed__post__form__input {
+  width: 97%;
+  background-color: inherit;
+  resize: none;
+  border: transparent;
+  font-size: var(--font-base);
+}
+.feed__post__form__input__append {
+  display: flex;
+}
+.feed__post__form__input__append > label {
+  margin: 0 0.3rem;
+}
+.feed__post__form__input__append > label:hover {
+  cursor: pointer;
+}
+.feed__post__form__input__append__post {
+  margin-left: auto;
+  opacity: 0.7;
+  padding: 0.5rem;
+  font-weight: 500;
+  color: black;
+  border: 0;
+  transition: opacity 0.3s ease;
+}
+.feed__post__form__input__append__post:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+.feed__post__img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-right: 0.7rem;
+  margin-top: -2rem;
+}
+.feed__tweet__user {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  padding: 1rem;
+}
+.feed__tweet__user__img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-right: 0.7rem;
+}
+.feed__tweet__user__info {
+  display: flex;
+  flex-direction: column;
+}
+.feed__tweet__user__info__name {
+  font-weight: 800;
+  text-decoration: none;
+  font-size: var(--font-sm);
+}
+.feed__tweet__user__info__handle {
+  font-size: var(--font-xs);
+  padding-left: 0.3rem;
+  color: white;
+  opacity: 0.4;
+}
+.feed__tweet__user__info__timestamp {
+  font-size: var(--font-xs);
+  padding-left: 0.3rem;
+  color: white;
+  opacity: 0.4;
+}
+.feed__tweet__layout {
+  display: flex;
+}/*# sourceMappingURL=Feed.module.css.map */
