@@ -15,6 +15,13 @@ class TweetRead(TweetBase):
     created_at: datetime
     account_id: int
     hashtags: List[str] = []
+    media: List[str] = []
     
     class Config:
         orm_mode = True
+
+class TweetUpdate(BaseModel):
+    content: Optional[str] = None 
+    hashtags: Optional[List[str]] = None
+    media: Optional[List[str]] = None 
+    # exclude_unset=True when applying it so only fields provided get updated

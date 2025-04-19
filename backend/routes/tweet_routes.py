@@ -1,34 +1,96 @@
-from fastapi import FastAPI, Path 
+from fastapi import FastAPI, HTTPException, Depends, Query, Path  
 from typing import Optional
+from sqlalchemy import func
+from sqlalchemy.orm import Session
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from backend import database
+from models import Tweet, Hashtag, Media
+from schemas import tweet, hashtag, media
 
 app = FastAPI()
+
+def get_db():
+    db = database.SessionLocal()
+    try:
+        yield db
+    finally: 
+        db.close()
 
 @app.get("/")
 def index(): 
     return {"name": "Homepage?"} #Maybe all tweets show up here idk
 
-@app.get("/api/tweets")
-def tweets():
+#Get all tweets
+@app.get("/api/tweets", response_model=tweet.TweetRead)
+def get_all_tweets(db: Session = Depends(get_db)):
+    # Query that get all the tweets
+    tweets = db.query(Tweet).all()
+
+    if not tweets:
+        raise HTTPException(status_code=404, detail="No tweets found")
+
     return tweets
 
-@app.put("/api/{account_id}/tweets/{tweet_id}")
-def edit_tweets(account_id: int, tweet_id: int):
-    return tweets[account_id, tweet_id]
+#Edit tweet
+@app.put("/api/{account_id}/tweets/{tweet_id}", response_model=tweet.TweetRead)
+def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, db: Session = Depends(get_db)):
+    tweet = db.query(Tweet).filter(Tweet.id == tweet_id, Tweet.account_id == account_id).first()
 
-@app.get("/api/tweets")
-def get_tweets():
+    if not tweet:
+        raise HTTPException(status_code=404, detail="The tweet you wanted to update was not found")
+    
+    # Updates text
+    if edit_tweet.content is not None:
+        tweet.content = edit_tweet.content
+
+    # Updates hashtags
+    if edit_tweet.hashtags is not None: 
+        tweet.hashtags.clear()
+
+        for tag in edit_tweet.hashtags:
+            hashtag = db.query(Hashtag).filter(Hashtag.tag == tag).first()
+
+            if not hashtag:
+                hashtag = Hashtag(name=tag)
+                db.add(hashtag)
+            tweet.hashtags.append(hashtag)
+
+    # Update media
+    if edit_tweet.media is not None:
+        for m in tweet.media:
+            db.delete(m)
+        tweet.media = []
+
+        for url in edit_tweet.media:
+            new_media = Media(url=url, tweet=tweet)
+            db.add(new_media)
+
+    db.commit()
+    db.refresh(tweet)
+
+    return tweet
+
+@app.get("/api/tweets", response_model=tweet.TweetRead)
+def get_tweet_containing_text(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    if q:
+        tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}")).all()
+    else:
+        tweets = db.query(Tweet).all()
+
     return tweets
 
-@app.get("/api/tweets?")
-def get_tweet_content():
-    return tweets
+# Search based on hashtags
+@app.get("/api/hashtags", response_model=hashtag.hashtagRead)
+def get_hashtags(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    query = db.query(Hashtag)
 
-@app.get("/api/:hashtags?")
-def get_hashtags():
-    return #hashtags 
+    if q:
+        query = query.filter(func.lower(Hashtag.tag).ilike(f"%{q.lower()}%"))
+    
+    hashtags = query.all()
 
-
-
-""" @app.get("/get-student/{student_id}")
-def get_student(student_id: int = Path(description="The ID of the student you want to view", gt=0)):
-    return students[student_id] """
+    return [h.tag for h in hashtags] 
