@@ -1,0 +1,96 @@
+@import '../../assets/global-styles/app.css';
+@import '../../assets/color-variables/colors.scss';
+
+.feed {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $border;
+    max-width: 40rem;
+    min-width: 30rem;
+    background-color: $card;
+
+    &__profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid $border;
+        padding: 1rem;
+        padding-bottom: 0.5rem;
+
+        &__top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            align-self: flex-start;
+
+            &__arrow {
+                text-decoration: none;
+                font-size: 1.5rem;
+            }
+
+            &__name {
+
+                &>h2 {
+                    font-size: var(--font-sm);
+                }
+
+                &>p {
+                    font-size: var(--font-xs);
+                    opacity: 0.7;
+                }
+            }
+        }
+        
+        &__coverimg {
+            width: 100%;
+        }
+    }
+
+    &__tweet {
+
+        &__user {
+            display: flex;
+            align-items: center;
+            border: 1px solid $border;
+            padding: 1rem;
+    
+            &__img {
+                width: 3rem;
+                height: 3rem;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-right: 0.7rem;
+            }
+
+            &__info {
+                display: flex;
+                flex-direction: column;
+
+                &__name {
+                    font-weight: 800;
+                    text-decoration: none;
+                    font-size: var(--font-sm);
+                }
+
+                &__handle {
+                    font-size: var(--font-xs);
+                    padding-left: 0.3rem;
+                    color: white;
+                    opacity: 0.4;
+                }
+
+                &__timestamp {
+                    font-size: var(--font-xs);
+                    padding-left: 0.3rem;
+                    color: white;
+                    opacity: 0.4;
+                }
+            }
+        }
+
+        &__layout {
+            display: flex;
+        }
+    }
+}

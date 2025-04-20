@@ -30,6 +30,9 @@
   border-radius: 30px;
   cursor: pointer;
 }
+.menu__side__list__item__link {
+  text-decoration: none;
+}
 .menu__side__button {
   background-color: #e1e8ed;
   color: #000000;
