@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends, Query, Path  
-from typing import Optional
+from typing import Optional, List
 from passlib.context import CryptContext
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -45,12 +45,19 @@ def create_account(account: AccountCreate, db: Session = Depends(get_db)):
     return new_account
 
 # Get all accounts
-@app.get("/api/accounts", response_model=AccountRead)
+@app.get("/api/accounts", response_model=List[AccountRead])
 def get_all_accounts(db: Session = Depends(get_db)):
     accounts = db.query(Account).all()
     return accounts
 
-# Get spesific account
+# search accounts
+@app.get("/api/accounts/search", response_model=List[AccountRead])
+def search_accounts(q: str, db: Session = Depends(get_db)):
+    return db.query(Account).filter(
+        Account.username.ilike(f"%{q}%") | Account.email.ilike(f"%{q}%")
+    ).all()
+
+# Get account by username
 @app.get("/api/accounts/{account_name}", response_model=AccountRead)
 def get_account(account_name: str, db: Session = Depends(get_db)):
     account = db.query(Account).filter(Account.username == account_name).first()
@@ -89,7 +96,7 @@ def post_tweet(account_id: int, tweet: TweetCreate, db: Session = Depends(get_db
     
     # TODO: Handle media similarly if needed
     if tweet.media:
-        media_objects = [Media(url=media_url) for media_url in tweet.media]
+        media_objects = [Media(url=media_url, media_type="image") for media_url in tweet.media]
         new_tweet.media = media_objects
 
     db.add(new_tweet)
