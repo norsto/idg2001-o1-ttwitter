@@ -28,14 +28,11 @@ def index():
 @app.get("/api/tweets", response_model=List[tweet.TweetRead])
 def get_tweets(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
     if q:
-        return db.query(Tweet).filter(Tweet.content.ilike(f"%{q}%")).all()
-    return db.query(Tweet).all()
-    # Query that get all the tweets
-
-
+        tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}%")).all()
+    else:
+        tweets = db.query(Tweet).all()
     if not tweets:
         raise HTTPException(status_code=404, detail="No tweets found")
-
     return tweets
 
 #Edit tweet
@@ -77,14 +74,14 @@ def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, d
 
     return tweet
 
-@app.get("/api/tweets", response_model=tweet.TweetRead)
-def get_tweet_containing_text(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
-    if q:
-        tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}")).all()
-    else:
-        tweets = db.query(Tweet).all()
-
-    return tweets
+#@app.get("/api/tweets", response_model=tweet.TweetRead)
+#def get_tweet_containing_text(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
+#    if q:
+#        tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}")).all()
+#    else:
+#        tweets = db.query(Tweet).all()
+#
+#    return tweets
 
 # Search based on hashtags
 @app.get("/api/hashtags", response_model=hashtag.hashtagRead)

@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 from .hashtag import hashtagRead
 from .media import MediaRead
+from .account import AccountRead
 
 class TweetBase(BaseModel):
     content: str
@@ -11,11 +12,11 @@ class TweetBase(BaseModel):
 class TweetCreate(TweetBase):
     hashtags: Optional[List[str]] = [] # List of hashtag strings (e.g., ["cats", "sigmagrindset"]
     media: Optional[List[str]] = [] # List of media URLs (e.g., ["https://example.com/image.jpg"])
-
+# changed account_id from int to AccountRead
 class TweetRead(TweetBase):
     id: int
     created_at: datetime
-    account_id: int
+    account_id: AccountRead
     hashtags: List[hashtagRead] = []
     media: List[MediaRead] = []
     
