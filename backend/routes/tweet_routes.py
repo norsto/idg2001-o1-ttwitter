@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends, Query, Path  
-from typing import Optional
+from typing import Optional, List
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 import sys
@@ -25,14 +25,14 @@ def index():
     return {"name": "Homepage?"} #Maybe all tweets show up here idk
 
 #Get all tweets
-@app.get("/api/tweets", response_model=tweet.TweetRead)
-def get_all_tweets(db: Session = Depends(get_db)):
-    # Query that get all the tweets
-    tweets = db.query(Tweet).all()
-
+@app.get("/api/tweets", response_model=List[tweet.TweetRead])
+def get_tweets(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    if q:
+        tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}%")).all()
+    else:
+        tweets = db.query(Tweet).all()
     if not tweets:
         raise HTTPException(status_code=404, detail="No tweets found")
-
     return tweets
 
 #Edit tweet
@@ -55,7 +55,7 @@ def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, d
             hashtag = db.query(Hashtag).filter(Hashtag.tag == tag).first()
 
             if not hashtag:
-                hashtag = Hashtag(name=tag)
+                hashtag = Hashtag(tag=tag)
                 db.add(hashtag)
             tweet.hashtags.append(hashtag)
 
@@ -74,14 +74,14 @@ def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, d
 
     return tweet
 
-@app.get("/api/tweets", response_model=tweet.TweetRead)
-def get_tweet_containing_text(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
-    if q:
-        tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}")).all()
-    else:
-        tweets = db.query(Tweet).all()
-
-    return tweets
+#@app.get("/api/tweets", response_model=tweet.TweetRead)
+#def get_tweet_containing_text(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
+#    if q:
+#        tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}")).all()
+#    else:
+#        tweets = db.query(Tweet).all()
+#
+#    return tweets
 
 # Search based on hashtags
 @app.get("/api/hashtags", response_model=hashtag.hashtagRead)
