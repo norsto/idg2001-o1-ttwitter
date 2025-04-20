@@ -1,6 +1,7 @@
 import styles from './Homepage.module.css';
 import SideMenu from '../../ui-components/SideMenu/SideMenu';
 import Feed from '../../ui-components/Feed/Feed';
+import SideFeed from '../../ui-components/SideFeed/SideFeed';
 
 export default function Homepage() {
     return (
@@ -11,6 +12,7 @@ export default function Homepage() {
                     <Feed />
                 </div>
             </div>
+            <SideFeed className={styles.home__sidemenu} />
         </div>
     );
 }
