@@ -1,0 +1,139 @@
+@import '../../assets/global-styles/app.css';
+.feed {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  max-width: 40rem;
+  min-width: 30rem;
+  background-color: rgba(22, 22, 22, 0.3882352941);
+}
+.feed__profile {
+  display: flex;
+  flex-direction: column;
+  border-bottom: none;
+}
+.feed__profile__top {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+}
+.feed__profile__top__arrow {
+  text-decoration: none;
+  font-size: 1.5rem;
+}
+.feed__profile__top__name {
+  display: flex;
+  flex-direction: column;
+}
+.feed__profile__top__name > h2 {
+  font-size: var(--font-md);
+}
+.feed__profile__top__name > p {
+  font-size: var(--font-xs);
+  opacity: 0.5;
+}
+.feed__profile__middle {
+  position: relative;
+  width: 100%;
+}
+.feed__profile__middle__coverimg {
+  width: 100%;
+  height: 200px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.feed__profile__middle__profileimg {
+  position: absolute;
+  bottom: -2.5rem;
+  left: 1rem;
+}
+.feed__profile__middle__profileimg__img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 3px solid #000000;
+}
+.feed__profile__bio {
+  padding: 3rem 1rem 1rem 1rem;
+}
+.feed__profile__bio__name {
+  font-size: var(--font-lg);
+}
+.feed__profile__bio__handle {
+  margin: 0.2rem 0;
+  opacity: 0.5;
+  font-size: var(--font-xs);
+}
+.feed__profile__bio__text {
+  padding: 0.7rem 0;
+  font-size: var(--font-sm);
+}
+.feed__profile__bio__info {
+  list-style-type: none;
+  display: flex;
+  gap: 2rem;
+}
+.feed__profile__bio__info__item {
+  opacity: 0.5;
+  font-size: var(--font-xs);
+}
+.feed__tweet__options {
+  display: flex;
+  gap: 2.5rem;
+  padding-left: 1rem;
+}
+.feed__tweet__options__button {
+  background: none;
+  border: none;
+  font-size: var(--font-sm);
+  border-bottom: 3px solid rgba(0, 0, 0, 0);
+  transition: border-bottom 0.1s ease;
+}
+.feed__tweet__options__button:hover {
+  cursor: pointer;
+  border-bottom: 3px solid #1da1f2;
+}
+.feed__tweet__user {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid rgba(101, 119, 134, 0.368627451);
+  padding: 1rem;
+}
+.feed__tweet__user__img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-right: 0.7rem;
+}
+.feed__tweet__user__info {
+  display: flex;
+  flex-direction: column;
+}
+.feed__tweet__user__info__name {
+  font-weight: 800;
+  text-decoration: none;
+  font-size: var(--font-sm);
+}
+.feed__tweet__user__info__handle {
+  font-size: var(--font-xs);
+  padding-left: 0.3rem;
+  color: white;
+  opacity: 0.4;
+}
+.feed__tweet__user__info__timestamp {
+  font-size: var(--font-xs);
+  padding-left: 0.3rem;
+  color: white;
+  opacity: 0.4;
+}
+.feed__tweet__user__post {
+  font-size: var(--font-sm);
+}
+.feed__tweet__layout {
+  display: flex;
+}/*# sourceMappingURL=PrivateFeed.module.css.map */

@@ -1,0 +1,40 @@
+@import '../../assets/global-styles/app.css';
+.home {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.home__sidemenu {
+  width: 15rem;
+  flex-shrink: 0;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  background: #f4f4f4;
+}
+.home__sidemenu::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.feed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.feed__container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.feed__container::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}/*# sourceMappingURL=ProfilePage.module.css.map */

@@ -1,0 +1,46 @@
+// IMPORTS
+@use '../color-variables/colors.scss' as *;
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+// FONT sizes
+:root {
+    --font-xs: clamp(0.75rem, 0.7rem + 0.3vw, 0.875rem);
+    --font-sm: clamp(0.875rem, 0.8rem + 0.4vw, 1rem);
+    --font-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+    --font-lg: clamp(1.125rem, 1rem + 0.6vw, 1.25rem);
+    --font-xl: clamp(1.25rem, 1.1rem + 0.8vw, 1.5rem);
+    --font-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+    --font-3xl: clamp(2rem, 1.6rem + 1.5vw, 2.5rem);
+}
+
+// GENERAL
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Libre Franklin";
+    color: $text;
+}
+
+.body {
+    background-color: $background;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+p {
+    font-size: var(--font-base);
+}
+
+h1, h2 {
+    font-size: var(--font-xl);
+}
+
+h3, h4, h5, h6 {
+    font-size: var(--font-base);
+}
+
+.button {
+    border-radius: 30px;
+}

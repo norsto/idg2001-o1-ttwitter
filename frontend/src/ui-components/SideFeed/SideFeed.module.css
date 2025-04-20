@@ -1,0 +1,28 @@
+@import '../../assets/global-styles/app.css';
+.SideFeed {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 15rem;
+  margin: 1rem;
+}
+.SideFeed__search {
+  border-radius: 30px;
+  padding: 0.5rem;
+  width: 99%;
+  background-color: #000000;
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  transition: border-color 0.2s ease;
+}
+.SideFeed__search:hover {
+  cursor: pointer;
+  border-color: #e1e8ed;
+}
+.SideFeed__card {
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  border-radius: 15px;
+  padding: 1rem;
+}
+.SideFeed__card__header {
+  padding-bottom: 0.5rem;
+}/*# sourceMappingURL=SideFeed.module.css.map */
