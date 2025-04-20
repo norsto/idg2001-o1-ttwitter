@@ -12,47 +12,115 @@
     &__profile {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        border: 1px solid $border;
-        padding: 1rem;
-        padding-bottom: 0.5rem;
-
+        border-bottom: none;
+    
         &__top {
             display: flex;
-            justify-content: center;
             align-items: center;
+            padding: 1rem;
             gap: 1rem;
-            align-self: flex-start;
-
+    
             &__arrow {
                 text-decoration: none;
                 font-size: 1.5rem;
             }
-
+    
             &__name {
-
-                &>h2 {
-                    font-size: var(--font-sm);
+                display: flex;
+                flex-direction: column;
+    
+                & > h2 {
+                    font-size: var(--font-md);
                 }
-
-                &>p {
+    
+                & > p {
                     font-size: var(--font-xs);
-                    opacity: 0.7;
+                    opacity: 0.5;
                 }
             }
         }
-        
-        &__coverimg {
+    
+        &__middle {
+            position: relative;
             width: 100%;
+    
+            &__coverimg {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+            }
+    
+            &__profileimg {
+                position: absolute;
+                bottom: -2.5rem;
+                left: 1rem;
+    
+                &__img {
+                    width: 5rem;
+                    height: 5rem;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 3px solid $background;
+                }
+            }
+        }
+    
+        &__bio {
+            padding: 3rem 1rem 1rem 1rem;
+    
+            &__name {
+                font-size: var(--font-lg);
+            }
+    
+            &__handle {
+                margin: 0.2rem 0;
+                opacity: 0.5;
+                font-size: var(--font-xs);
+            }
+
+            &__text {
+                padding: 0.7rem 0;
+                font-size: var(--font-sm);
+            }
+
+            &__info {
+                list-style-type: none;
+                display: flex;
+                gap: 2rem;
+
+                &__item {
+                    opacity: 0.5;
+                    font-size: var(--font-xs);
+                }
+            }
         }
     }
 
     &__tweet {
 
+        &__options {
+            display: flex;
+            gap: 2.5rem;
+            padding-left: 1rem;
+
+            &__button {
+                background: none;
+                border: none;
+                font-size: var(--font-sm);
+                border-bottom: 3px solid rgba($color: #000000, $alpha: 0);
+                transition: border-bottom 0.1s ease;
+
+                &:hover {
+                    cursor: pointer;
+                    border-bottom: 3px solid $notification;
+                }
+            }
+        }
+
         &__user {
             display: flex;
             align-items: center;
-            border: 1px solid $border;
+            border-top: 1px solid $border;
             padding: 1rem;
     
             &__img {
@@ -86,6 +154,10 @@
                     color: white;
                     opacity: 0.4;
                 }
+            }
+            
+            &__post {
+                font-size: var(--font-sm);
             }
         }
 

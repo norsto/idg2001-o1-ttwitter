@@ -90,6 +90,9 @@
   color: white;
   opacity: 0.4;
 }
+.feed__tweet__user__post {
+  font-size: var(--font-sm);
+}
 .feed__tweet__layout {
   display: flex;
 }/*# sourceMappingURL=Feed.module.css.map */

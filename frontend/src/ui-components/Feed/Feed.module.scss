@@ -106,6 +106,10 @@
                     opacity: 0.4;
                 }
             }
+
+            &__post {
+                font-size: var(--font-sm);
+            }
         }
 
         &__layout {

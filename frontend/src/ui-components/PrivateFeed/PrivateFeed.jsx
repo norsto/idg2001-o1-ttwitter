@@ -16,16 +16,39 @@ export default function PrivateFeed() {
                     </div>
                 </div>
 
-                <img 
-                    src="../../../public/placeholder1.jpg" 
-                    alt="profilepic"
-                    className={styles.feed__profile__coverimg}
-                />
+                <div className={styles.feed__profile__middle}>
+                    <img 
+                        src="../../../public/placeholder1.jpg" 
+                        alt="coverpic"
+                        className={styles.feed__profile__middle__coverimg}
+                    />
+                    <div className={styles.feed__profile__middle__profileimg}>
+                        <img 
+                            src="../../../public/pepefrog.jpg" 
+                            alt="profilepic" 
+                            className={styles.feed__profile__middle__profileimg__img} 
+                            />
+                    </div>
+                </div>
+                <div className={styles.feed__profile__bio}>
+                    <h2 className={styles.feed__profile__bio__name}>Username</h2>
+                    <p className={styles.feed__profile__bio__handle}>@username123</p>
+                    <p className={styles.feed__profile__bio__text}>I like turdals</p>
+                    <ul className={styles.feed__profile__bio__info}>
+                        <li className={styles.feed__profile__bio__info__item}>Country</li>
+                        <li className={styles.feed__profile__bio__info__item}>Birth date</li>
+                        <li className={styles.feed__profile__bio__info__item}>Account age</li>
+                    </ul>
+                </div>
 
             </div>
 
             <div>
                 <div className={styles.feed__tweet}>
+                    <div className={styles.feed__tweet__options}>
+                        <button className={styles.feed__tweet__options__button}>Posts</button>
+                        <button className={styles.feed__tweet__options__button}>Media</button>
+                    </div>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((num) => (
                         <div className={styles.feed__tweet__user}>
                             <div>
@@ -46,7 +69,7 @@ export default function PrivateFeed() {
                                     <p className={styles.feed__tweet__user__info__timestamp}>- {Math.floor(Math.random() * 10)}h</p>
                                 </div>
                                 <div>
-                                    <p>The end is near</p>
+                                    <p className={styles.feed__tweet__user__post}>The end is near</p>
                                 </div>
                             </div>
                         </div>

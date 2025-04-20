@@ -6,7 +6,7 @@ export default function SideMenu() {
         <div className={styles.menu__side}>
             <div>
                 <div>
-                    <h1 className={styles.menu__side__logo}>X</h1>
+                    <h1 className={styles.menu__side__logo}>Z</h1>
                     <ul className={styles.menu__side__list}>
                         <li className={styles.menu__side__list__item}> <Link className={styles.menu__side__list__item__link} to="/">Home</Link></li>
                         <li className={styles.menu__side__list__item}> <Link className={styles.menu__side__list__item__link} to="/username/profile">Profile</Link></li>

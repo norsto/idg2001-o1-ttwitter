@@ -62,7 +62,7 @@ export default function Feed() {
                                     <p className={styles.feed__tweet__user__info__timestamp}>- {Math.floor(Math.random() * 10)}h</p>
                                 </div>
                                 <div>
-                                    <p>The end is near</p>
+                                    <p className={styles.feed__tweet__user__post}>The end is near</p>
                                 </div>
                             </div>
                         </div>
