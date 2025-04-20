@@ -1,9 +1,12 @@
-from fastapi import FastAPI, HTTPException, Depends, Query, Path  
+from fastapi import FastAPI, HTTPException, Depends, Query, Path
+from fastapi.security import OAuth2PasswordRequestForm
 from typing import Optional, List
 from passlib.context import CryptContext
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from database import SessionLocal
+from backend.auth import auth_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from datetime import timedelta
 import sys
 import os
 
@@ -44,6 +47,18 @@ def create_account(account: AccountCreate, db: Session = Depends(get_db)):
     db.refresh(new_account)
     return new_account
 
+# Login
+@app.post("/api/accounts/login")
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = auth_user(db, form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    access_token = create_access_token(
+        data={"sub": user.username},
+        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
+
 # Get all accounts
 @app.get("/api/accounts", response_model=List[AccountRead])
 def get_all_accounts(db: Session = Depends(get_db)):
@@ -67,6 +82,7 @@ def get_account(account_name: str, db: Session = Depends(get_db)):
     
     return account
 
+# TODO: test and add authentication to to protected routes
 # Post tweets
 @app.post("/api/{account_id}/tweets", response_model=TweetRead)
 def post_tweet(account_id: int, tweet: TweetCreate, db: Session = Depends(get_db)):
