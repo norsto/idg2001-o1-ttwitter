@@ -10,7 +10,6 @@
 .feed__post {
   display: flex;
   align-items: center;
-  border: 1px solid rgba(101, 119, 134, 0.368627451);
   padding: 1rem;
   padding-bottom: 0.5rem;
 }
