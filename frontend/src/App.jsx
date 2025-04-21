@@ -12,7 +12,7 @@ function App() {
     <div className='body'>
       <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/username/profile" element={<ProfilePage />} />
+        <Route path="/:username/profile" element={<ProfilePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
