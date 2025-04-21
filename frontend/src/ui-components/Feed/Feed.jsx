@@ -1,7 +1,17 @@
 import styles from './Feed.module.css';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 export default function Feed() {
+    const [accounts, setAccounts] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:8000/api/accounts') // kanskje sett env variable for PORT sann at fingrane våra kan leve lenger (API_BASE_URL=blablablabla:1337)...
+            .then(res => res.json())
+            .then(data => setAccounts(data))
+            .catch(err => console.error('Error fetching accounts:', err));
+    }, []);
+
     return (
         <div className={styles.feed}>
 
@@ -42,7 +52,7 @@ export default function Feed() {
 
             <div>
                 <div className={styles.feed__tweet}>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((num) => (
+                    {accounts.map((account) => (
                         <div className={styles.feed__tweet__user}>
                             <div>
                                 <img 
@@ -56,9 +66,9 @@ export default function Feed() {
                                         to={`/username/profile`}
                                         className={styles.feed__tweet__user__info__name}
                                     >
-                                    Username
+                                    {account.username}
                                     </Link>
-                                    <p className={styles.feed__tweet__user__info__handle}>@username123</p>
+                                    <p className={styles.feed__tweet__user__info__handle}>insert handle</p>
                                     <p className={styles.feed__tweet__user__info__timestamp}>- {Math.floor(Math.random() * 10)}h</p>
                                 </div>
                                 <div>

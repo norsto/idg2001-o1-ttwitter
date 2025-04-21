@@ -30,5 +30,30 @@
         &__header {
             padding-bottom: 0.5rem;
         }
+
+        &__suggestions {
+            display: flex;
+            
+            &__img {
+                width: 3rem;
+                height: 3rem;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-right: 0.7rem;
+                margin-bottom: 1rem;
+            }
+
+            &__name {
+                font-weight: 800;
+                text-decoration: none;
+                font-size: var(--font-sm);
+            }
+
+            &__handle {
+                font-size: var(--font-xs);
+                color: white;
+                opacity: 0.4;
+            }
+        }
     }
 }

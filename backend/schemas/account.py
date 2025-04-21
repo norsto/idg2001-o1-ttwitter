@@ -12,7 +12,10 @@ class AccountCreate(AccountBase):
 class AccountRead(AccountBase):
     id: int
     created_at: datetime
-    tweets: List[int] = [] # List of tweet IDs (e.g., ["1", "2", "3"])
+    tweets: List["TweetBase"] # <-- forward reference as a string
 
     class Config:
         orm_mode = True
+
+from backend.schemas.tweet import TweetBase  # <-- "lazy import" to avoid circular referencing
+AccountRead.model_rebuild()

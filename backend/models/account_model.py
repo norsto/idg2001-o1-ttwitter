@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from backend.database import Base
 
+tweets = relationship("Tweet", back_populates="account")
+
 class Account(Base):
     __tablename__ = 'accounts'
 

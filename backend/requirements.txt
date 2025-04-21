@@ -8,3 +8,4 @@ alembic
 faker
 passlib[bcrypt]
 python-jose[cryptography]
+python-multipart
