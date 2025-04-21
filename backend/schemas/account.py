@@ -5,6 +5,7 @@ from typing import List, Optional
 class AccountBase(BaseModel):
     username: str
     email: str
+    handle: str
 
 class AccountCreate(AccountBase):
     password: str

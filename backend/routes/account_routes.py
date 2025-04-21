@@ -40,6 +40,7 @@ def create_account(account: AccountCreate, db: Session = Depends(get_db)):
     new_account = Account(
         username=account.username,
         email=account.email,
+        handle=account.handle,
         password=hashed_pw 
     )
     db.add(new_account)

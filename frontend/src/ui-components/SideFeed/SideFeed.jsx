@@ -41,7 +41,7 @@ export default function SideFeed() {
                                 >
                                 {account.username}
                                 </Link>
-                                <p className={styles.SideFeed__card__suggestions__handle}>insert handle</p>
+                                <p className={styles.SideFeed__card__suggestions__handle}>{account.handle}</p>
                             </div>
                         </div>
                     </div>

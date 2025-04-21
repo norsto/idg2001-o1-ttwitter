@@ -28,6 +28,7 @@ def create_accounts(session: Session, count=5):
         account = Account(
             username=fake.user_name(),
             email=fake.email(),
+            handle=fake.handle(),
             password=fake.password(length=12)
         )
         session.add(account)

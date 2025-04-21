@@ -68,7 +68,7 @@ export default function Feed() {
                                     >
                                     {account.username}
                                     </Link>
-                                    <p className={styles.feed__tweet__user__info__handle}>insert handle</p>
+                                    <p className={styles.feed__tweet__user__info__handle}>{account.handle}</p>
                                     <p className={styles.feed__tweet__user__info__timestamp}>- {Math.floor(Math.random() * 10)}h</p>
                                 </div>
                                 <div>
