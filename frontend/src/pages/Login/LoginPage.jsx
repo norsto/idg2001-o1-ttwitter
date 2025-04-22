@@ -36,8 +36,7 @@ export default function LoginPage() {
             }
 
             const data = await res.json();
-            // Optional: store token or user in localStorage or context
-            // localStorage.setItem('token', data.token);
+            localStorage.setItem('token', data.access_token);
 
             navigate('/'); // Redirect to home or feed
         } catch (err) {

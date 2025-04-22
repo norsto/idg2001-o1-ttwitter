@@ -51,7 +51,7 @@ def auth_user(db: Session, username: str, password: str):
     return user
 
 # JWT Authentication Dependency
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/accounts/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/accounts/login")
 
 # Function to get the current logged-in user from the token
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
@@ -93,7 +93,7 @@ def create_account(account: AccountCreate, db: Session = Depends(get_db)):
     db.refresh(new_account)
     return new_account
 
-# Login with email
+# Login with username
 @router.post("/api/accounts/login")
 def login(
     username: str = Form(...),
