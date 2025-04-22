@@ -5,8 +5,27 @@ import { useEffect, useState } from 'react';
 export default function Feed() {
     const [accounts, setAccounts] = useState([]);
     const [allTweets, setAllTweets] = useState([]);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            // Fetch user data by username
+            fetch('http://localhost:8000/api/accounts/me', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            })
+            .then(res => res.json())
+            .then(data => {
+                setUser(data); // Store the logged-in user data
+            })
+            .catch(err => console.error('Error fetching user data:', err));
+        }
+
+        // Fetch all accounts for the feed
         fetch('http://localhost:8000/api/accounts')
             .then(res => res.json())
             .then(data => {
@@ -31,35 +50,35 @@ export default function Feed() {
 
     return (
         <div className={styles.feed}>
-
+            {/* Post Tweet Section */}
             <div className={styles.feed__post}>
                 <img 
-                src="../../../public/pepefrog.jpg" 
-                alt=""
-                className={styles.feed__post__img}
+                    src="../../../public/pepefrog.jpg" 
+                    alt=""
+                    className={styles.feed__post__img}
                 />
                 <form className={styles.feed__post__form}
-                 method="post"
-                 encType="multipart/form-data"
-                 >
+                    method="post"
+                    encType="multipart/form-data"
+                >
                     <textarea 
-                    name="tweet" 
-                    id="tweet_textfield"
-                    className={styles.feed__post__form__input}
-                    placeholder='Post propaganda and fake news'
+                        name="tweet" 
+                        id="tweet_textfield"
+                        className={styles.feed__post__form__input}
+                        placeholder='Post propaganda and fake news'
                     ></textarea>
                     <div className={styles.feed__post__form__input__append}>
                         <label>
                             📷
-                        <input type="file" name="image" accept="image/*" hidden />
+                            <input type="file" name="image" accept="image/*" hidden />
                         </label>
                         <label>
-                        🎵
-                        <input type="file" name="audio" accept="audio/*" hidden />
+                            🎵
+                            <input type="file" name="audio" accept="audio/*" hidden />
                         </label>
                         <label>
-                        🎥
-                        <input type="file" name="video" accept="video/*" hidden />
+                            🎥
+                            <input type="file" name="video" accept="video/*" hidden />
                         </label>
 
                         <button className={`${styles.feed__post__form__input__append__post} button`}>Post</button>
@@ -67,9 +86,10 @@ export default function Feed() {
                 </form>
             </div>
 
+            {/* Display Tweets */}
             <div>
                 <div className={styles.feed__tweet}>
-                {allTweets.map((tweet, index) => (
+                    {allTweets.map((tweet, index) => (
                         <div key={index} className={styles.feed__tweet__user}>
                             <div>
                                 <img 
@@ -97,7 +117,7 @@ export default function Feed() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 {/* SORT BY CREATED_AT */}

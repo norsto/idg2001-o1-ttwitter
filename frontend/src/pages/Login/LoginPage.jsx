@@ -1,7 +1,50 @@
 import styles from './LoginPage.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function LoginPage() {
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError(null);
+
+        try {
+            const res = await fetch('http://localhost:8000/api/accounts/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    email: formData.email,
+                    password: formData.password
+                }),
+            });
+
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.message || 'Login failed');
+            }
+
+            const data = await res.json();
+            // Optional: store token or user in localStorage or context
+            // localStorage.setItem('token', data.token);
+
+            navigate('/'); // Redirect to home or feed
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     return (
         <div className={styles.login}>
             <div>
@@ -10,32 +53,45 @@ export default function LoginPage() {
             <div className={styles.login__form}>
                 <div className={styles.login__form__login}>
                     <h1>Login</h1>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className={styles.login__form__login__email}>
                             <label htmlFor="email">Email</label>
-                            <input type="email" id="email" name="email" required />
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
                         </div>
                         <div className={styles.login__form__login__password}>
                             <label htmlFor="password">Password</label>
-                            <input type="password" id="password" name="password" required />
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
                         </div>
                         <div className={styles.login__form__login__submit}>
                             <button type="submit">Login</button>
+                            {error && <p style={{ color: 'red' }}>{error}</p>}
                         </div>
                         <div className={styles.login__form__login__forgot}>
-                            <button>Forgot password</button>
+                            <button type="button">Forgot password</button>
                         </div>
                     </form>
                 </div>
                 <div className={styles.login__form__register}>
-                    <p>
-                        Don't have an account?
-                    </p>
+                    <p>Don't have an account?</p>
                     <Link className={styles.login__form__register__button} to="/register">
                         Register Account
                     </Link>
                 </div>
             </div>
         </div>
-    )
+    );
 }

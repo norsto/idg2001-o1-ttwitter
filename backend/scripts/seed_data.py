@@ -1,13 +1,13 @@
 # seed_data.py
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'backend')))
 
 import random
 from faker import Faker
 from sqlalchemy.orm import Session
-from database import SessionLocal, engine, Base
-from models import Account, Tweet, Hashtag, Media
+from backend.database import SessionLocal, engine, Base
+from backend.models import Account, Tweet, Hashtag, Media
 
 # --- Setup
 fake = Faker()
@@ -28,7 +28,7 @@ def create_accounts(session: Session, count=5):
         account = Account(
             username=fake.user_name(),
             email=fake.email(),
-            handle=fake.handle(),
+            handle=fake.user_name(),
             password=fake.password(length=12)
         )
         session.add(account)

@@ -28,6 +28,7 @@
   padding: 0.5rem;
   margin-bottom: 0.2rem;
   border-radius: 5px;
+  color: #e1e8ed;
 }
 .register__form__email {
   display: flex;
