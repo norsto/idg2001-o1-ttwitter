@@ -123,6 +123,15 @@ def search_accounts(q: str, db: Session = Depends(get_db)):
         Account.username.ilike(f"%{q}%") | Account.email.ilike(f"%{q}%")
     ).all()
 
+# Get current logged-in user's data
+@router.get("/api/accounts/me", response_model=AccountRead)
+def get_current_account(current_user: Account = Depends(get_current_user), db: Session = Depends(get_db)):
+    # Fetch user data using the current logged-in user (who is decoded from the token)
+    user = db.query(Account).filter(Account.username == current_user.username).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
 # Get account by username
 @router.get("/api/accounts/{account_name}", response_model=AccountRead)
 def get_account(account_name: str, db: Session = Depends(get_db)):
@@ -132,15 +141,6 @@ def get_account(account_name: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Account not found")
     
     return account
-
-# Get current logged-in user's data
-@router.get("/api/accounts/me", response_model=AccountRead)
-def get_current_account(current_user: Account = Depends(get_current_user), db: Session = Depends(get_db)):
-    # Fetch user data using the current logged-in user (who is decoded from the token)
-    user = db.query(Account).filter(Account.username == current_user.username).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
 
 # Post tweet (requires authentication)
 @router.post("/api/tweets", response_model=TweetRead)
