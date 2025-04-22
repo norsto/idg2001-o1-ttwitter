@@ -182,3 +182,20 @@ def post_tweet(
     db.refresh(new_tweet)
 
     return new_tweet
+
+# Owner of account deletes own account
+@router.delete("/api/accounts/{account_id}", status_code=200)
+def delete_account(account_id: int,db: Session = Depends(get_db), current_user: Account = Depends(get_current_user)):
+
+    if current_user.id != account_id:
+        raise HTTPException(status_code=403, detail="You are not authorized to delete this account")
+
+    account = db.query(Account).filter(Account.id == account_id).first()
+
+    if not account:
+        raise HTTPException(status_code=404, detail="Account not found")
+    
+    db.delete(account)
+    db.commit()
+
+    return {"message": "Account deleted successfully"}
