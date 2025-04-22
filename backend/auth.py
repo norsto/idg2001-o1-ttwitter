@@ -6,9 +6,15 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from backend import database
 from backend.models import Account
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # CONFIG 
-SECRET_KEY = "replace-this-with-env-variable"
+SECRET_KEY = os.getenv("SECRET_KEY")
+if SECRET_KEY is None:
+    raise ValueError("SECRET_KEY environment variable is not set.")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -31,12 +37,12 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 # DATABASE UTILS
-def get_account_by_email(db: Session, email: str):
-    return db.query(Account).filter(Account.email == email).first()
+def get_account_by_username(db: Session, username: str):
+    return db.query(Account).filter(Account.username == username).first()
 
 # AUTHENTICATION
-def auth_user(db: Session, email: str, password: str):
-    user = get_account_by_email(db, email)
+def auth_user(db: Session, username: str, password: str):
+    user = get_account_by_username(db, username)
     if not user or not verify_password(password, user.password):
         return None
     return user
@@ -53,13 +59,13 @@ def get_current_user(
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
+        username: str = payload.get("sub")
+        if username is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
     
-    user = get_account_by_email(db, email)
+    user = get_account_by_username(db, username)
     if user is None:
         raise credentials_exception
     return user

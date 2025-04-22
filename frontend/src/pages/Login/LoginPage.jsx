@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 export default function LoginPage() {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [formData, setFormData] = useState({ username: '', password: '' });
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ export default function LoginPage() {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: new URLSearchParams({
-                    email: formData.email,
+                    username: formData.username,
                     password: formData.password
                 }),
             });
@@ -55,12 +55,12 @@ export default function LoginPage() {
                     <h1>Login</h1>
                     <form onSubmit={handleSubmit}>
                         <div className={styles.login__form__login__email}>
-                            <label htmlFor="email">Email</label>
+                            <label htmlFor="username">Username</label>
                             <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={formData.email}
+                                type="text"
+                                id="username"
+                                name="username"
+                                value={formData.username}
                                 onChange={handleChange}
                                 required
                             />

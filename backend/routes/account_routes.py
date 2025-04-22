@@ -13,6 +13,8 @@ from backend.models import Account, Tweet, Hashtag, Media
 from backend.schemas.account import AccountRead, AccountCreate, AccountBase
 from backend.schemas.tweet import TweetRead, TweetCreate, TweetUpdate, TweetBase
 from backend.schemas.media import MediaBase, MediaCreate, MediaRead
+from fastapi.security import OAuth2PasswordBearer
+from passlib.context import CryptContext
 
 load_dotenv()
 
@@ -29,6 +31,10 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
+# Password Verification Function
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
 # Database session dependency
 def get_db():
     db = database.SessionLocal()
@@ -37,9 +43,9 @@ def get_db():
     finally: 
         db.close()
 
-# Authenticate User (login by email)
-def auth_user(db: Session, email: str, password: str):
-    user = db.query(Account).filter(Account.email == email).first()
+# Authenticate User (login by username)
+def auth_user(db: Session, username: str, password: str):
+    user = db.query(Account).filter(Account.username == username).first()
     if not user or not verify_password(password, user.password):
         return None
     return user
@@ -57,14 +63,14 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     try:
         # Decode the JWT token to get user details
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email = payload.get("sub")
-        if email is None:
+        username = payload.get("sub")
+        if username is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
     
     # Fetch the user from the database
-    user = db.query(Account).filter(Account.email == email).first()
+    user = db.query(Account).filter(Account.username == username).first()
     if user is None:
         raise credentials_exception
     return user
@@ -90,16 +96,16 @@ def create_account(account: AccountCreate, db: Session = Depends(get_db)):
 # Login with email
 @router.post("/api/accounts/login")
 def login(
-    email: str = Form(...),
+    username: str = Form(...),
     password: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    user = auth_user(db, email, password)
+    user = auth_user(db, username, password)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
     
     access_token = create_access_token(
-        data={"sub": user.email},
+        data={"sub": user.username},
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
     return {"access_token": access_token, "token_type": "bearer"}
@@ -131,7 +137,7 @@ def get_account(account_name: str, db: Session = Depends(get_db)):
 @router.get("/api/accounts/me", response_model=AccountRead)
 def get_current_account(current_user: Account = Depends(get_current_user), db: Session = Depends(get_db)):
     # Fetch user data using the current logged-in user (who is decoded from the token)
-    user = db.query(Account).filter(Account.email == current_user.email).first()
+    user = db.query(Account).filter(Account.username == current_user.username).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
