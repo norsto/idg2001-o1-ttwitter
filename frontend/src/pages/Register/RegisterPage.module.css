@@ -1,0 +1,98 @@
+@import '../../assets/global-styles/app.css';
+.register {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.register > h1 {
+  font-size: var(--font-3xl);
+  padding-bottom: 1rem;
+}
+.register__form {
+  padding: 1rem;
+  width: 100%;
+}
+.register__form__name {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.7rem;
+}
+.register__form__name > label {
+  font-size: var(--font-base);
+  margin-bottom: 0.1rem;
+}
+.register__form__name > input {
+  background-color: rgba(22, 22, 22, 0.3882352941);
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  padding: 0.5rem;
+  margin-bottom: 0.2rem;
+  border-radius: 5px;
+}
+.register__form__email {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.7rem;
+}
+.register__form__email > label {
+  font-size: var(--font-base);
+  margin-bottom: 0.1rem;
+}
+.register__form__email > input {
+  background-color: rgba(22, 22, 22, 0.3882352941);
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  padding: 0.5rem;
+  margin-bottom: 0.2rem;
+  border-radius: 5px;
+}
+.register__form__password {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.7rem;
+}
+.register__form__password > label {
+  font-size: var(--font-base);
+  margin-bottom: 0.1rem;
+}
+.register__form__password > input {
+  background-color: rgba(22, 22, 22, 0.3882352941);
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  padding: 0.5rem;
+  margin-bottom: 0.2rem;
+  border-radius: 5px;
+}
+.register__form__confirm {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.7rem;
+}
+.register__form__confirm > label {
+  font-size: var(--font-base);
+  margin-bottom: 0.1rem;
+}
+.register__form__confirm > input {
+  background-color: rgba(22, 22, 22, 0.3882352941);
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  padding: 0.5rem;
+  margin-bottom: 0.2rem;
+  border-radius: 5px;
+}
+.register__form__button {
+  border-top: 1px solid rgba(101, 119, 134, 0.368627451);
+}
+.register__form__button > button {
+  background-color: #e1e8ed;
+  color: #000000;
+  padding: 0.5rem;
+  margin: 1rem 0;
+  width: 100%;
+  border: 1px transparent;
+  border-radius: 30px;
+  font-size: var(--font-sm);
+  transition: color 0.1s ease, background-color 0.1s ease;
+}
+.register__form__button > button:hover {
+  cursor: pointer;
+  color: #e1e8ed;
+  background-color: rgba(101, 119, 134, 0.368627451);
+}/*# sourceMappingURL=RegisterPage.module.css.map */

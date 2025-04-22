@@ -7,3 +7,4 @@ python-dotenv
 alembic
 faker
 passlib[bcrypt]
+python-jose[cryptography]

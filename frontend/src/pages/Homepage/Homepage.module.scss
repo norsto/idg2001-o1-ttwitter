@@ -1,0 +1,49 @@
+@import '../../assets/global-styles/app.css';
+@import '../../assets/color-variables/colors.scss';
+
+.home {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+
+  &__sidemenu {
+    width: 15rem;
+    flex-shrink: 0;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+
+    scrollbar-width: none;
+
+    -ms-overflow-style: none;
+
+    background: #f4f4f4;
+  }
+}
+
+.feed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &__container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+
+    &::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+}
