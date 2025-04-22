@@ -8,8 +8,9 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from backend import database
-from backend.models import Tweet, Hashtag, Media
-from backend.schemas import tweet, hashtag, media
+from backend.models import Tweet, Hashtag, Media, Account
+from backend.schemas import tweet, hashtag, media, account 
+from account_routes import get_current_user
 
 router = APIRouter()
 
@@ -71,6 +72,23 @@ def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, d
 
     db.commit()
     db.refresh(tweet)
+
+    return tweet
+
+# Delete tweet
+@router.delete("/api/{account_id}/tweets/{tweet_id}", response_model=tweet.TweetRead)
+def delete_tweets(account_id: int, tweet_id: int, db: Session = Depends(get_db), current_account: Account = Depends(get_current_user)):
+
+    if current_account.id != account_id:
+        raise HTTPException(status_code=403, detail="You don't have access to post, edit, or delete tweets on this account")
+    
+    tweet = db.query(Tweet).filter(Tweet.id == tweet_id, Tweet.account_id == account_id).first()
+
+    if not tweet:
+        raise HTTPException(status_code=404, detail="Tweet not found")
+    
+    db.delete(tweet)
+    db.commit()
 
     return tweet
 

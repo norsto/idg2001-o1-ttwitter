@@ -15,4 +15,4 @@ class Account(Base):
     password = Column(String(255), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    tweets = relationship("Tweet", back_populates="account", cascade="all, delete")
+    tweets = relationship("Tweet", back_populates="account", cascade="all, delete-orphan")
