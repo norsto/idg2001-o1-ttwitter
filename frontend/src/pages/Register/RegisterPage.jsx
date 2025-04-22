@@ -1,23 +1,53 @@
 import styles from './RegisterPage.module.css';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterPage() {
+    const [error, setError] = useState(null)
     const [formData, setFormData] = useState({
-        name: '',
+        username: '',
+        handle: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        confirmPassword: ''
     });
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
     };
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log('Form submitted:', formData);
+
+        if (formData.password !== formData.confirmPassword) {
+            setError("Passwords don't match");
+            return;
+        }
+
+        const { confirmPassword, ...cleanData } = formData;
+
+        try {
+            const res = await fetch('http://localhost:8000/api/accounts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cleanData),
+            });
+
+            if(!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.message || 'Registration failed');
+            }
+            navigate('/login');
+        } catch (err) {
+            setError(err.message);
+        }
     };
 
     return (
@@ -25,12 +55,24 @@ export default function RegisterPage() {
             <h1>Create an Account</h1>
             <form className={styles.register__form} onSubmit={handleSubmit}>
                 <div className={styles.register__form__name}>
-                    <label htmlFor="name">Username</label>
+                    <label htmlFor="username">Username</label>
                     <input
                         type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
+                        id="username"
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className={styles.register__form__name}>
+                    <label htmlFor="handle">Handle</label>
+                    <input
+                        type="text"
+                        id="handle"
+                        name="handle"
+                        value={formData.handle}
                         onChange={handleChange}
                         required
                     />
@@ -74,6 +116,7 @@ export default function RegisterPage() {
 
                 <div className={styles.register__form__button}>
                     <button type="submit">Register</button>
+                    {error && <p>{error}</p>}
                 </div>
             </form>
         </div>

@@ -4,6 +4,8 @@ from datetime import datetime
 from backend.database import Base
 from .association_model import tweet_hashtag_table
 
+account = relationship("Account", back_populates="tweets")
+
 class Tweet(Base):
     __tablename__ = 'tweets'
 

@@ -1,18 +1,44 @@
 import styles from './PrivateFeed.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 export default function PrivateFeed() {
+    const { username } = useParams();
+    const [account, setAccount] = useState(null);
+    const [sortedTweets, setSortedTweets] = useState([]);
+
+    useEffect(() => {
+        if (username) {
+            fetch(`http://localhost:8000/api/accounts/${username}`)
+                .then(res => res.json())
+                .then(data => {
+                    setAccount(data);
+
+                    const tweetsWithTime = (data.tweets || []).map(tweet => ({
+                        ...tweet,
+                        fakeHoursAgo: Math.floor(Math.random() * 10)
+                    }));
+
+                    const sorted = tweetsWithTime.sort((a, b) => a.fakeHoursAgo - b.fakeHoursAgo);
+                    setSortedTweets(sorted);
+                })
+                .catch(err => console.error('Error fetching account:', err));
+        }
+    }, [username]);
+
+    if (!account) {
+        return <p>Loading...</p>;
+    }
+
     return (
         <div className={styles.feed}>
-
             <div className={styles.feed__profile}>
-
                 <div className={styles.feed__profile__top}>
                     <Link className={styles.feed__profile__top__arrow} to="/">&larr;</Link>
 
                     <div className={styles.feed__profile__top__name}>
-                        <h2>Username</h2>
-                        <p>{Math.floor(Math.random() * 1000)} posts</p>
+                        <h2>{account.username}</h2>
+                        <p>{account.tweets ? account.tweets.length : 0} posts</p>
                     </div>
                 </div>
 
@@ -27,20 +53,20 @@ export default function PrivateFeed() {
                             src="../../../public/pepefrog.jpg" 
                             alt="profilepic" 
                             className={styles.feed__profile__middle__profileimg__img} 
-                            />
+                        />
                     </div>
                 </div>
+
                 <div className={styles.feed__profile__bio}>
-                    <h2 className={styles.feed__profile__bio__name}>Username</h2>
-                    <p className={styles.feed__profile__bio__handle}>@username123</p>
+                    <h2 className={styles.feed__profile__bio__name}>{account.username}</h2>
+                    <p className={styles.feed__profile__bio__handle}>@{account.handle}</p>
                     <p className={styles.feed__profile__bio__text}>I like turdals</p>
                     <ul className={styles.feed__profile__bio__info}>
                         <li className={styles.feed__profile__bio__info__item}>Country</li>
                         <li className={styles.feed__profile__bio__info__item}>Birth date</li>
-                        <li className={styles.feed__profile__bio__info__item}>Account age</li>
+                        <li className={styles.feed__profile__bio__info__item}>{account.created_at}</li>
                     </ul>
                 </div>
-
             </div>
 
             <div>
@@ -49,8 +75,9 @@ export default function PrivateFeed() {
                         <button className={styles.feed__tweet__options__button}>Posts</button>
                         <button className={styles.feed__tweet__options__button}>Media</button>
                     </div>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((num) => (
-                        <div className={styles.feed__tweet__user}>
+
+                    {sortedTweets.map((tweet, index) => (
+                        <div key={index} className={styles.feed__tweet__user}>
                             <div>
                                 <img 
                                     src="../../../public/pepefrog.jpg" alt="profilepic"
@@ -60,23 +87,22 @@ export default function PrivateFeed() {
                             <div className={styles.feed__tweet__user__info}>
                                 <div className={styles.feed__tweet__layout}>
                                     <Link 
-                                        to={`/username/profile`}
+                                        to={`/${account.username}/profile`}
                                         className={styles.feed__tweet__user__info__name}
                                     >
-                                    Username
+                                        {account.username}
                                     </Link>
-                                    <p className={styles.feed__tweet__user__info__handle}>@username123</p>
-                                    <p className={styles.feed__tweet__user__info__timestamp}>- {Math.floor(Math.random() * 10)}h</p>
+                                    <p className={styles.feed__tweet__user__info__handle}>@{account.handle}</p>
+                                    <p className={styles.feed__tweet__user__info__timestamp}>- {tweet.fakeHoursAgo}h</p>
                                 </div>
                                 <div>
-                                    <p className={styles.feed__tweet__user__post}>The end is near</p>
+                                    <p className={styles.feed__tweet__user__post}>{tweet.content}</p>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
-
         </div>
-    )
+    );
 }
