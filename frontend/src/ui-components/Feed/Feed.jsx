@@ -9,9 +9,8 @@ export default function Feed() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-
+    
         if (token) {
-            // Fetch user data by username
             fetch('http://localhost:8000/api/accounts/me', {
                 method: 'GET',
                 headers: {
@@ -24,13 +23,13 @@ export default function Feed() {
             })
             .catch(err => console.error('Error fetching user data:', err));
         }
-
+    
         // Fetch all accounts for the feed
         fetch('http://localhost:8000/api/accounts')
             .then(res => res.json())
             .then(data => {
                 setAccounts(data);
-
+    
                 // Add a fake "hours ago" number and sort based on it
                 const tweets = data
                     .flatMap(account =>
@@ -41,12 +40,12 @@ export default function Feed() {
                             fakeHoursAgo: Math.floor(Math.random() * 10)
                         }))
                     )
-                    .sort((a, b) => a.fakeHoursAgo - b.fakeHoursAgo); // earliest first
-
+                    .sort((a, b) => a.fakeHoursAgo - b.fakeHoursAgo); // Most recent first
+    
                 setAllTweets(tweets);
             })
             .catch(err => console.error('Error fetching accounts:', err));
-    }, []);
+    }, []);    
 
     return (
         <div className={styles.feed}>
