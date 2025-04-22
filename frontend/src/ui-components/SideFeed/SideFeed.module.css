@@ -22,7 +22,30 @@
   border: 1px solid rgba(101, 119, 134, 0.368627451);
   border-radius: 15px;
   padding: 1rem;
+  padding-bottom: 0;
 }
 .SideFeed__card__header {
   padding-bottom: 0.5rem;
+}
+.SideFeed__card__suggestions {
+  display: flex;
+}
+.SideFeed__card__suggestions__img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-right: 0.7rem;
+  margin-bottom: 1rem;
+}
+.SideFeed__card__suggestions__name {
+  font-weight: 800;
+  text-decoration: none;
+  font-size: var(--font-sm);
+}
+.SideFeed__card__suggestions__handle {
+  font-size: var(--font-xs);
+  color: white;
+  opacity: 0.4;
 }/*# sourceMappingURL=SideFeed.module.css.map */

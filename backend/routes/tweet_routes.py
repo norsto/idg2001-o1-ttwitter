@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, Query, Path  
+from fastapi import FastAPI, HTTPException, Depends, Query, Path  , APIRouter
 from typing import Optional, List
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -8,10 +8,10 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from backend import database
-from models import Tweet, Hashtag, Media
-from schemas import tweet, hashtag, media
+from backend.models import Tweet, Hashtag, Media
+from backend.schemas import tweet, hashtag, media
 
-app = FastAPI()
+router = APIRouter()
 
 def get_db():
     db = database.SessionLocal()
@@ -20,12 +20,12 @@ def get_db():
     finally: 
         db.close()
 
-@app.get("/")
+@router.get("/")
 def index(): 
     return {"name": "Homepage?"} #Maybe all tweets show up here idk
 
 #Get all tweets
-@app.get("/api/tweets", response_model=List[tweet.TweetRead])
+@router.get("/api/tweets", response_model=List[tweet.TweetRead])
 def get_tweets(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
     if q:
         tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}%")).all()
@@ -36,7 +36,7 @@ def get_tweets(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
     return tweets
 
 #Edit tweet
-@app.put("/api/{account_id}/tweets/{tweet_id}", response_model=tweet.TweetRead)
+@router.put("/api/{account_id}/tweets/{tweet_id}", response_model=tweet.TweetRead)
 def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, db: Session = Depends(get_db)):
     tweet = db.query(Tweet).filter(Tweet.id == tweet_id, Tweet.account_id == account_id).first()
 
@@ -84,7 +84,7 @@ def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, d
 #    return tweets
 
 # Search based on hashtags
-@app.get("/api/hashtags", response_model=hashtag.hashtagRead)
+@router.get("/api/hashtags", response_model=hashtag.hashtagRead)
 def get_hashtags(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
     query = db.query(Hashtag)
 

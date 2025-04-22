@@ -6,38 +6,52 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from backend import database
 from backend.models import Account
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
-SECRET_KEY = "replace-this-with-env-variable"
+# CONFIG 
+SECRET_KEY = os.getenv("SECRET_KEY")
+if SECRET_KEY is None:
+    raise ValueError("SECRET_KEY environment variable is not set.")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
+# SETUP 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+# PASSWORD UTILS 
 def verify_password(plain_pwd, hashed_pwd):
     return pwd_context.verify(plain_pwd, hashed_pwd)
 
 def hash_password(password):
     return pwd_context.hash(password)
 
+# TOKEN CREATION
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
+# DATABASE UTILS
 def get_account_by_username(db: Session, username: str):
     return db.query(Account).filter(Account.username == username).first()
 
+# AUTHENTICATION
 def auth_user(db: Session, username: str, password: str):
     user = get_account_by_username(db, username)
     if not user or not verify_password(password, user.password):
         return None
     return user
 
-def get_current_user(db: Session = Depends(database.SessionLocal), token: str = Depends(oauth2_scheme)):
+# CURRENT USER
+def get_current_user(
+    db: Session = Depends(database.SessionLocal),
+    token: str = Depends(oauth2_scheme)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
