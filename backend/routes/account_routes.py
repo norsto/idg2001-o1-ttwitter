@@ -111,10 +111,20 @@ def login(
     return {"access_token": access_token, "token_type": "bearer"}
 
 # Get all accounts
-@router.get("/api/accounts", response_model=List[AccountRead])
+@router.get("/api/accounts")
 def get_all_accounts(db: Session = Depends(get_db)):
     accounts = db.query(Account).all()
-    return accounts
+    return [
+        {
+            "id": account.id,
+            "username": account.username,
+            "handle": account.handle,
+            "email": account.email,
+            "created_at": account.created_at.isoformat(),
+            "tweets": [tweet.to_dict() for tweet in account.tweets]  # Use to_dict() for tweets
+        }
+        for account in accounts
+    ]
 
 # Search accounts
 @router.get("/api/accounts/search", response_model=List[AccountRead])

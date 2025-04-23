@@ -26,6 +26,30 @@ export default function PrivateFeed() {
         }
     }, [username]);
 
+    const handleDelete = async (accountId, tweetId) => {
+        const token = localStorage.getItem("token");
+        try {
+            const response = await fetch(`http://localhost:8000/api/${accountId}/tweets/${tweetId}`,  {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Failed to delete tweet: ${response.statusText}`);
+            }
+    
+            const deletedTweet = await response.json();
+    
+            // Remove tweet from UI
+            setSortedTweets(prev => prev.filter(tweet => tweet.id !== deletedTweet.id));
+        } catch (error) {
+            console.error('Error deleting tweet:', error);
+            alert('Failed to delete tweet. You might not have permission.');
+        }
+    };    
+
     if (!account) {
         return <p>Loading...</p>;
     }
@@ -64,7 +88,7 @@ export default function PrivateFeed() {
                     <ul className={styles.feed__profile__bio__info}>
                         <li className={styles.feed__profile__bio__info__item}>Country</li>
                         <li className={styles.feed__profile__bio__info__item}>Birth date</li>
-                        <li className={styles.feed__profile__bio__info__item}>{account.created_at}</li>
+                        <li className={styles.feed__profile__bio__info__item}>{new Date(account.created_at).toLocaleDateString}</li>
                     </ul>
                 </div>
             </div>
@@ -94,6 +118,13 @@ export default function PrivateFeed() {
                                     </Link>
                                     <p className={styles.feed__tweet__user__info__handle}>@{account.handle}</p>
                                     <p className={styles.feed__tweet__user__info__timestamp}>- {tweet.fakeHoursAgo}h</p>
+                                    <button 
+                                    className={styles.feed__tweet__user__info__delete}
+                                    onClick={() => handleDelete(account.id, tweet.id)}
+                                    title="Delete tweet"
+                                    >
+                                        &#x1F5D1;
+                                    </button>
                                 </div>
                                 <div>
                                     <p className={styles.feed__tweet__user__post}>{tweet.content}</p>

@@ -4,6 +4,7 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
+from zoneinfo import ZoneInfo
 from backend import database
 from backend.models import Account
 from dotenv import load_dotenv
@@ -32,7 +33,7 @@ def hash_password(password):
 # TOKEN CREATION
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    expire = datetime.now(ZoneInfo("UTC")) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 

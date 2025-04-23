@@ -111,6 +111,7 @@
   margin-right: 0.7rem;
 }
 .feed__tweet__user__info {
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -131,9 +132,17 @@
   color: white;
   opacity: 0.4;
 }
+.feed__tweet__user__info__delete {
+  margin-left: auto;
+  cursor: pointer;
+  background-color: #000000;
+  border: none;
+}
 .feed__tweet__user__post {
   font-size: var(--font-sm);
 }
 .feed__tweet__layout {
+  width: auto;
   display: flex;
+  align-items: center;
 }/*# sourceMappingURL=PrivateFeed.module.css.map */
