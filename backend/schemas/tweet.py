@@ -16,7 +16,7 @@ class TweetCreate(TweetBase):
 class TweetRead(TweetBase):
     id: int
     created_at: datetime
-    account_id: AccountRead
+    account: AccountRead
     hashtags: List[hashtagRead] = []
     media: List[MediaRead] = []
     

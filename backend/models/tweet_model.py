@@ -4,14 +4,12 @@ from datetime import datetime
 from backend.database import Base
 from .association_model import tweet_hashtag_table
 
-account = relationship("Account", back_populates="tweets")
-
 class Tweet(Base):
     __tablename__ = 'tweets'
 
     id = Column(Integer, primary_key=True, index=True)
     content = Column(Text, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.now())
 
     account_id = Column(Integer, ForeignKey('accounts.id'), nullable=False)
     account = relationship("Account", back_populates="tweets")

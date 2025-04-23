@@ -10,7 +10,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from backend import database
 from backend.models import Tweet, Hashtag, Media, Account
 from backend.schemas import tweet, hashtag, media, account 
-from account_routes import get_current_user
+from backend.routes.account_routes import get_current_user
+from sqlalchemy.orm import joinedload
 
 router = APIRouter()
 
@@ -25,16 +26,21 @@ def get_db():
 def index(): 
     return {"name": "Homepage?"} #Maybe all tweets show up here idk
 
-#Get all tweets
+# Get all tweets
 @router.get("/api/tweets", response_model=List[tweet.TweetRead])
 def get_tweets(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    query = db.query(Tweet).options(joinedload(Tweet.account))
+
     if q:
-        tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}%")).all()
-    else:
-        tweets = db.query(Tweet).all()
+        query = query.filter(Tweet.content.ilike(f"%{q}%"))
+
+    tweets = query.all()
+
     if not tweets:
         raise HTTPException(status_code=404, detail="No tweets found")
+
     return tweets
+
 
 #Edit tweet
 @router.put("/api/{account_id}/tweets/{tweet_id}", response_model=tweet.TweetRead)

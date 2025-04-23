@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 export default function Feed() {
     const [accounts, setAccounts] = useState([]);
     const [allTweets, setAllTweets] = useState([]);
+    const [tweetPost, setTweetPost] = useState('');
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -30,22 +31,66 @@ export default function Feed() {
             .then(data => {
                 setAccounts(data);
     
-                // Add a fake "hours ago" number and sort based on it
+                // Sort by created_at(timestamp)
                 const tweets = data
                     .flatMap(account =>
                         (account.tweets || []).map(tweet => ({
                             ...tweet,
                             accountUsername: account.username,
                             accountHandle: account.handle,
-                            fakeHoursAgo: Math.floor(Math.random() * 10)
                         }))
                     )
-                    .sort((a, b) => a.fakeHoursAgo - b.fakeHoursAgo); // Most recent first
-    
+                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Most recent first
+
                 setAllTweets(tweets);
+
             })
-            .catch(err => console.error('Error fetching accounts:', err));
+            .catch(err => console.error('Error fetching accounts:', err));      
     }, []);    
+
+    function handleTweetSubmit(e) {
+        e.preventDefault();
+        const token = localStorage.getItem("token");
+    
+        if (!token || !tweetPost.trim()) return;
+    
+        fetch('http://localhost:8000/api/tweets', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                content: tweetPost,
+                hashtags: [],
+                media: []  
+            })
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`Failed to post tweet: ${res.statusText}`);
+            }
+            return res.json();
+        })
+        .then(newTweet => {
+            setAllTweets(prev => [{
+                ...newTweet,
+                accountUsername: user.username,
+                accountHandle: user.handle,
+                fakeHoursAgo: 0
+            }, ...prev]);
+            setTweetPost('');
+        })
+        .catch(err => console.error('Error posting tweet:', err));
+    }      
+
+    function formatRelativeTime(timestamp) {
+        const diff = (new Date() - new Date(timestamp)) / 1000; // seconds
+        if (diff < 60) return `${Math.floor(diff)}s`;
+        if (diff < 3600) return `${Math.floor(diff / 60)}m`;
+        if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
+        return `${Math.floor(diff / 86400)}d`;
+    }    
 
     return (
         <div className={styles.feed}>
@@ -59,12 +104,15 @@ export default function Feed() {
                 <form className={styles.feed__post__form}
                     method="post"
                     encType="multipart/form-data"
+                    onSubmit={handleTweetSubmit}
                 >
                     <textarea 
                         name="tweet" 
                         id="tweet_textfield"
                         className={styles.feed__post__form__input}
                         placeholder='Post propaganda and fake news'
+                        value={tweetPost}
+                        onChange={(e) => setTweetPost(e.target.value)}
                     ></textarea>
                     <div className={styles.feed__post__form__input__append}>
                         <label>
@@ -80,7 +128,7 @@ export default function Feed() {
                             <input type="file" name="video" accept="video/*" hidden />
                         </label>
 
-                        <button className={`${styles.feed__post__form__input__append__post} button`}>Post</button>
+                        <button type="submit" className={`${styles.feed__post__form__input__append__post} button`}>Post</button>
                     </div>
                 </form>
             </div>
@@ -105,7 +153,7 @@ export default function Feed() {
                                         {tweet.accountUsername}
                                     </Link>
                                     <p className={styles.feed__tweet__user__info__handle}>@{tweet.accountHandle}</p>
-                                    <p className={styles.feed__tweet__user__info__timestamp}>- {tweet.fakeHoursAgo}h</p>
+                                    <p className={styles.feed__tweet__user__info__timestamp}>- {formatRelativeTime(tweet.created_at)}</p>
                                 </div>
                                 <div>
                                     <p className={styles.feed__tweet__user__post}>{tweet.content}</p>
