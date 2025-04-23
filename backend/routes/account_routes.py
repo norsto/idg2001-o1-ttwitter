@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 import os
 from backend import database
 from backend.models import Account, Tweet, Hashtag, Media
-from backend.schemas.account import AccountRead, AccountCreate, AccountBase
+from backend.schemas.account import AccountRead, AccountCreate, AccountBase, AccountCredentials
 from backend.schemas.tweet import TweetRead, TweetCreate, TweetUpdate, TweetBase
 from backend.schemas.media import MediaBase, MediaCreate, MediaRead
 from fastapi.security import OAuth2PasswordBearer
@@ -185,7 +185,7 @@ def post_tweet(
 
 # Owner of account deletes own account
 @router.delete("/api/accounts/{account_id}", status_code=200)
-def delete_account(account_id: int,db: Session = Depends(get_db), current_user: Account = Depends(get_current_user)):
+def delete_account(account_id: int, password: str, db: Session = Depends(get_db), current_user: Account = Depends(get_current_user)):
 
     if current_user.id != account_id:
         raise HTTPException(status_code=403, detail="You are not authorized to delete this account")
@@ -194,6 +194,9 @@ def delete_account(account_id: int,db: Session = Depends(get_db), current_user: 
 
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
+    
+    if not verify_password(password, account.password):
+        raise HTTPException(status_code=403, detail="Incorrect password")
     
     db.delete(account)
     db.commit()

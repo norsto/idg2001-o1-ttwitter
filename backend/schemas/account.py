@@ -18,5 +18,9 @@ class AccountRead(AccountBase):
     class Config:
         orm_mode = True
 
+class AccountCredentials(BaseModel):
+    username: str
+    password: str
+
 from backend.schemas.tweet import TweetBase  # <-- "lazy import" to avoid circular referencing
 AccountRead.model_rebuild()
