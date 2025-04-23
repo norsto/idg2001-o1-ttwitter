@@ -88,7 +88,7 @@ export default function PrivateFeed() {
                     <ul className={styles.feed__profile__bio__info}>
                         <li className={styles.feed__profile__bio__info__item}>Country</li>
                         <li className={styles.feed__profile__bio__info__item}>Birth date</li>
-                        <li className={styles.feed__profile__bio__info__item}>{account.created_at}</li>
+                        <li className={styles.feed__profile__bio__info__item}>{new Date(account.created_at).toLocaleDateString}</li>
                     </ul>
                 </div>
             </div>

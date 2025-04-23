@@ -29,18 +29,21 @@ export default function Feed() {
         fetch('http://localhost:8000/api/accounts')
             .then(res => res.json())
             .then(data => {
-                setAccounts(data);
+                //setAccounts(data);
     
                 // Sort by created_at(timestamp)
                 const tweets = data
                     .flatMap(account =>
-                        (account.tweets || []).map(tweet => ({
+                        (account.tweets || []).map(tweet =>{
+                            return {
                             ...tweet,
                             accountUsername: account.username,
                             accountHandle: account.handle,
-                        }))
+                            created_at: tweet.created_at 
+                                }
+                        })
                     )
-                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Most recent first
+                    .sort((a, b) => b.created_at - a.created_at); // Most recent first
 
                 setAllTweets(tweets);
 
@@ -48,6 +51,7 @@ export default function Feed() {
             .catch(err => console.error('Error fetching accounts:', err));      
     }, []);    
 
+   
     function handleTweetSubmit(e) {
         e.preventDefault();
         const token = localStorage.getItem("token");
@@ -77,15 +81,24 @@ export default function Feed() {
                 ...newTweet,
                 accountUsername: user.username,
                 accountHandle: user.handle,
-                fakeHoursAgo: 0
+                created_at: newTweet.created_at
             }, ...prev]);
             setTweetPost('');
         })
         .catch(err => console.error('Error posting tweet:', err));
-    }      
+    } 
 
+    
     function formatRelativeTime(timestamp) {
-        const diff = (new Date() - new Date(timestamp)) / 1000; // seconds
+
+        if (!timestamp) {
+            console.error('Invalid timestamp:', timestamp);   
+            return 'just now'
+        }
+        
+        const now = Date.now();
+        const diff = (now - timestamp) / 1000; // seconds
+
         if (diff < 60) return `${Math.floor(diff)}s`;
         if (diff < 3600) return `${Math.floor(diff / 60)}m`;
         if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
