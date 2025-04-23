@@ -29,16 +29,19 @@ export default function Feed() {
         fetch('http://localhost:8000/api/accounts')
             .then(res => res.json())
             .then(data => {
-                setAccounts(data);
+                //setAccounts(data);
     
                 // Sort by created_at(timestamp)
                 const tweets = data
                     .flatMap(account =>
-                        (account.tweets || []).map(tweet => ({
+                        (account.tweets || []).map(tweet =>{
+                            return {
                             ...tweet,
                             accountUsername: account.username,
                             accountHandle: account.handle,
-                        }))
+                            created_at: tweet.created_at 
+                                }
+                        })
                     )
                     .sort((a, b) => b.created_at - a.created_at); // Most recent first
 
@@ -78,7 +81,7 @@ export default function Feed() {
                 ...newTweet,
                 accountUsername: user.username,
                 accountHandle: user.handle,
-                fakeHoursAgo: 0
+                created_at: newTweet.created_at
             }, ...prev]);
             setTweetPost('');
         })
@@ -87,7 +90,13 @@ export default function Feed() {
 
     
     function formatRelativeTime(timestamp) {
-        const now = new Date();
+
+        if (!timestamp) {
+            console.error('Invalid timestamp:', timestamp);   
+            return 'just now'
+        }
+        
+        const now = Date.now();
         const diff = (now - timestamp) / 1000; // seconds
 
         if (diff < 60) return `${Math.floor(diff)}s`;

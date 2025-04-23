@@ -31,6 +31,6 @@ class Tweet(Base):
         return {
             "id": self.id,
             "content": self.content,
-            "created_at": int(self.created_at.timestamp( * 1000)),
+            "created_at": int(self.created_at.timestamp() * 1000),
             "account_id": self.account_id
         }

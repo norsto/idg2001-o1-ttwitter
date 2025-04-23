@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, event
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -17,6 +17,12 @@ class Account(Base):
     tweets = relationship("Tweet", back_populates="account", cascade="all, delete-orphan")
 
     def to_dict(self):
+        try:
+            timestamp = int(self.created_at.timestamp() * 1000)
+        except (AttributeError, TypeError):
+            # Fallback if timestamp is invalid
+            timestamp = int(datetime.now(ZoneInfo('UTC')).timestamp() * 1000)
+    
         return {
             "id": self.id,
             "username": self.username,
@@ -24,3 +30,4 @@ class Account(Base):
             "email": self.email,
             "created_at": int(self.created_at.timestamp() * 1000)
         }
+    
