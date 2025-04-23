@@ -40,7 +40,7 @@ export default function Feed() {
                             accountHandle: account.handle,
                         }))
                     )
-                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Most recent first
+                    .sort((a, b) => b.created_at - a.created_at); // Most recent first
 
                 setAllTweets(tweets);
 
@@ -48,6 +48,7 @@ export default function Feed() {
             .catch(err => console.error('Error fetching accounts:', err));      
     }, []);    
 
+   
     function handleTweetSubmit(e) {
         e.preventDefault();
         const token = localStorage.getItem("token");
@@ -82,10 +83,13 @@ export default function Feed() {
             setTweetPost('');
         })
         .catch(err => console.error('Error posting tweet:', err));
-    }      
+    } 
 
+    
     function formatRelativeTime(timestamp) {
-        const diff = (new Date() - new Date(timestamp)) / 1000; // seconds
+        const now = new Date();
+        const diff = (now - timestamp) / 1000; // seconds
+
         if (diff < 60) return `${Math.floor(diff)}s`;
         if (diff < 3600) return `${Math.floor(diff / 60)}m`;
         if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
