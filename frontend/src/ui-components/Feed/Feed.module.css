@@ -69,6 +69,7 @@
   margin-right: 0.7rem;
 }
 .feed__tweet__user__info {
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -94,4 +95,5 @@
 }
 .feed__tweet__layout {
   display: flex;
+  align-items: center;
 }/*# sourceMappingURL=Feed.module.css.map */

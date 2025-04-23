@@ -132,6 +132,7 @@
             }
 
             &__info {
+                width: 100%;
                 display: flex;
                 flex-direction: column;
 
@@ -154,6 +155,13 @@
                     color: white;
                     opacity: 0.4;
                 }
+
+                &__delete{
+                    margin-left: auto;
+                    cursor: pointer; // optional: adds pointer on hover
+                    background-color: $background;
+                    border: none;
+                }
             }
             
             &__post {
@@ -162,7 +170,9 @@
         }
 
         &__layout {
+            width: auto;
             display: flex;
+            align-items: center;
         }
     }
 }
