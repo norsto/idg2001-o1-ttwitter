@@ -129,9 +129,12 @@ def get_all_accounts(db: Session = Depends(get_db)):
 # Search accounts
 @router.get("/api/accounts/search", response_model=List[AccountRead])
 def search_accounts(q: str, db: Session = Depends(get_db)):
-    return db.query(Account).filter(
+    accounts = db.query(Account).filter(
         Account.username.ilike(f"%{q}%") | Account.email.ilike(f"%{q}%")
     ).all()
+    if not accounts:
+        raise HTTPException(status_code=404, detail="No accounts found")
+    return accounts
 
 # Get current logged-in user's data
 @router.get("/api/accounts/me", response_model=AccountRead)
@@ -143,9 +146,9 @@ def get_current_account(current_user: Account = Depends(get_current_user), db: S
     return user
 
 # Get account by username
-@router.get("/api/accounts/{account_name}", response_model=AccountRead)
-def get_account(account_name: str, db: Session = Depends(get_db)):
-    account = db.query(Account).filter(Account.username == account_name).first()
+@router.get("/api/accounts/{username}", response_model=AccountRead)
+def get_account(username: str, db: Session = Depends(get_db)):
+    account = db.query(Account).filter(Account.username == username).first()
 
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")

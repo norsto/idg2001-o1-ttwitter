@@ -36,7 +36,7 @@ export default function SideFeed() {
                         <div>
                             <div>
                                 <Link 
-                                    to={`/username/profile`}
+                                    to={`/${account.username}/profile`}
                                     className={styles.SideFeed__card__suggestions__name}
                                 >
                                 {account.username}

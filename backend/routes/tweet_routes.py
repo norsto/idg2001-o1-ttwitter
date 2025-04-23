@@ -108,13 +108,16 @@ def delete_tweets(account_id: int, tweet_id: int, db: Session = Depends(get_db),
 #    return tweets
 
 # Search based on hashtags
-@router.get("/api/hashtags", response_model=hashtag.hashtagRead)
-def get_hashtags(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
-    query = db.query(Hashtag)
+@router.get("/api/hashtags/search", response_model=List[hashtag.hashtagRead])
+def search_hashtags(q: str, db: Session = Depends(get_db)):
+    hashtags = db.query(Hashtag).filter(Hashtag.tag.ilike(f"%{q}%")).all()
+    if not hashtags:
+        raise HTTPException(status_code=404, detail="No hashtags found")
+    return hashtags
 
-    if q:
-        query = query.filter(func.lower(Hashtag.tag).ilike(f"%{q.lower()}%"))
-    
-    hashtags = query.all()
-
-    return [h.tag for h in hashtags] 
+@router.get("/api/tweets/search", response_model=List[tweet.TweetRead])
+def search_tweets(q: str, db: Session = Depends(get_db)):
+    tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}%")).all()
+    if not tweets:
+        raise HTTPException(status_code=404, detail="No tweets found")
+    return tweets
