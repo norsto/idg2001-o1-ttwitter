@@ -19,12 +19,8 @@ class TweetCreate(TweetBase):
 class TweetRead(TweetBase):
     id: int
     created_at: datetime
- account
     account: AccountMinimal
-    hashtags: List[hashtagRead] = []
-
-
- main
+    hashtags: List[HashtagRead] = []
     media: List[MediaRead] = []
     
     class Config:
