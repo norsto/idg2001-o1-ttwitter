@@ -82,7 +82,7 @@ def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, d
     return tweet
 
 # Delete tweet
-@router.delete("/api/{account_id}/tweets/{tweet_id}", response_model=tweet.TweetRead)
+@router.delete("/api/{account_id}/tweets/{tweet_id}")
 def delete_tweets(account_id: int, tweet_id: int, db: Session = Depends(get_db), current_account: Account = Depends(get_current_user)):
 
     if current_account.id != account_id:
@@ -96,7 +96,7 @@ def delete_tweets(account_id: int, tweet_id: int, db: Session = Depends(get_db),
     db.delete(tweet)
     db.commit()
 
-    return tweet
+    return {"message": "Tweet Deleted"}
 
 #@app.get("/api/tweets", response_model=tweet.TweetRead)
 #def get_tweet_containing_text(q: Optional[str] = Query(None), db: Session = Depends(get_db)):

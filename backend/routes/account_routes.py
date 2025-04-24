@@ -153,7 +153,16 @@ def get_account(username: str, db: Session = Depends(get_db)):
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
     
-    return account
+    response = {
+        "id": account.id,
+        "username": account.username,
+        "email": account.email,
+        "handle": account.handle,
+        "created_at": account.created_at.isoformat(),
+        "tweets": [tweet.to_dict() for tweet in account.tweets]  # Use to_dict for tweets
+    }
+    print(response)
+    return response
 
 # Post tweet (requires authentication)
 @router.post("/api/tweets", response_model=TweetRead)
