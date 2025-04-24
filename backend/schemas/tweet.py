@@ -5,6 +5,9 @@ from .hashtag import hashtagRead
 from .media import MediaRead
 from .account import AccountRead
 
+class SearchRequest(BaseModel):
+    query: str
+
 class TweetBase(BaseModel):
     content: str
     #created_time: datetime <- this is not needed as it will be set by the server
