@@ -1,7 +1,7 @@
 import styles from './SideFeed.module.css';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import SearchBar from '../Search/SearchBar'; // Import the SearchBar component
+import SearchBar from '../Search/SearchBar';
 
 export default function SideFeed() {
     const [accounts, setAccounts] = useState([]);
@@ -11,21 +11,33 @@ export default function SideFeed() {
     const onSearch = async (searchQuery) => {
         try {
             // Fetch accounts matching the query
-            const accountsRes = await fetch(`http://localhost:8000/api/accounts/search?q=${searchQuery}`);
+            const accountsRes = await fetch(`http://localhost:8000/api/accounts/search`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: searchQuery }),
+            });
             const accountsData = await accountsRes.json();
 
             // Fetch hashtags matching the query
-            const hashtagsRes = await fetch(`http://localhost:8000/api/hashtags/search?q=${searchQuery}`);
+            const hashtagsRes = await fetch(`http://localhost:8000/api/hashtags/search`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: searchQuery }),
+            });
             const hashtagsData = await hashtagsRes.json();
 
             // Fetch tweets matching the query
-            const tweetsRes = await fetch(`http://localhost:8000/api/tweets/search?q=${searchQuery}`);
+            const tweetsRes = await fetch(`http://localhost:8000/api/tweets/search`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: searchQuery }),
+            });
             const tweetsData = await tweetsRes.json();
 
             // Update state with the results
-            setAccounts(accountsData);
+            setAccounts(Array.isArray(accountsData) ? accountsData : []);
             setHashtags(Array.isArray(hashtagsData) ? hashtagsData : []);
-            setTweets(tweetsData);
+            setTweets(Array.isArray(tweetsData) ? tweetsData : []);
         } catch (err) {
             console.error('Error during search:', err);
         }
@@ -33,7 +45,6 @@ export default function SideFeed() {
 
     return (
         <div className={styles.SideFeed}>
-            {/* Use the SearchBar component */}
             <SearchBar onSearch={onSearch} />
 
             <div className={styles.SideFeed__card}>
@@ -45,13 +56,14 @@ export default function SideFeed() {
                     {accounts.map((account) => (
                         <div key={account.username} className={styles.SideFeed__card__suggestions}>
                             <div>
-                                <img 
-                                    src="../../../public/npcwojak.png" alt="profilepic"
-                                    className={styles.SideFeed__card__suggestions__img} 
+                                <img
+                                    src="../../../public/npcwojak.png"
+                                    alt="profilepic"
+                                    className={styles.SideFeed__card__suggestions__img}
                                 />
                             </div>
                             <div>
-                                <Link 
+                                <Link
                                     to={`/${account.username}/profile`}
                                     className={styles.SideFeed__card__suggestions__name}
                                 >
