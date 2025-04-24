@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 import os
 from backend import database
 from backend.models import Account, Tweet, Hashtag, Media
-from backend.schemas.account import AccountRead, AccountCreate, AccountBase, AccountCredentials
+from backend.schemas.account import AccountRead, AccountCreate, AccountBase, AccountCredentials, SearchRequest
 from backend.schemas.tweet import TweetRead, TweetCreate, TweetUpdate, TweetBase
 from backend.schemas.media import MediaBase, MediaCreate, MediaRead
 from fastapi.security import OAuth2PasswordBearer
@@ -127,10 +127,10 @@ def get_all_accounts(db: Session = Depends(get_db)):
     ]
 
 # Search accounts
-@router.get("/api/accounts/search", response_model=List[AccountRead])
-def search_accounts(q: str, db: Session = Depends(get_db)):
+@router.post("/api/accounts/search", response_model=List[AccountRead])
+def search_accounts(request: SearchRequest, db: Session = Depends(get_db)):
     accounts = db.query(Account).filter(
-        Account.username.ilike(f"%{q}%") | Account.email.ilike(f"%{q}%")
+        Account.username.ilike(f"%{request.query}%") | Account.email.ilike(f"%{request.query}%")
     ).all()
     if not accounts:
         raise HTTPException(status_code=404, detail="No accounts found")

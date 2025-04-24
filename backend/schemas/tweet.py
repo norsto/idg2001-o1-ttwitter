@@ -1,9 +1,12 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List, Optional
-from .hashtag import hashtagRead
+from .hashtag import HashtagRead
 from .media import MediaRead
 from .account import AccountMinimal
+
+class SearchRequest(BaseModel):
+    query: str
 
 class TweetBase(BaseModel):
     content: str
@@ -16,8 +19,12 @@ class TweetCreate(TweetBase):
 class TweetRead(TweetBase):
     id: int
     created_at: datetime
+ account
     account: AccountMinimal
     hashtags: List[hashtagRead] = []
+
+
+ main
     media: List[MediaRead] = []
     
     class Config:

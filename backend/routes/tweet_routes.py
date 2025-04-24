@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from backend import database
 from backend.models import Tweet, Hashtag, Media, Account
-from backend.schemas import tweet, hashtag, media, account 
+from backend.schemas import tweet, media, account, SearchRequest, TweetRead, HashtagRead
 from backend.routes.account_routes import get_current_user
 from sqlalchemy.orm import joinedload
 
@@ -108,16 +108,16 @@ def delete_tweets(account_id: int, tweet_id: int, db: Session = Depends(get_db),
 #    return tweets
 
 # Search based on hashtags
-@router.get("/api/hashtags/search", response_model=List[hashtag.hashtagRead])
-def search_hashtags(q: str, db: Session = Depends(get_db)):
-    hashtags = db.query(Hashtag).filter(Hashtag.tag.ilike(f"%{q}%")).all()
+@router.post("/api/hashtags/search", response_model=List[HashtagRead])
+def search_hashtags(request: SearchRequest, db: Session = Depends(get_db)):
+    hashtags = db.query(Hashtag).filter(Hashtag.tag.ilike(f"%{request.query}%")).all()
     if not hashtags:
         raise HTTPException(status_code=404, detail="No hashtags found")
     return hashtags
 
-@router.get("/api/tweets/search", response_model=List[tweet.TweetRead])
-def search_tweets(q: str, db: Session = Depends(get_db)):
-    tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{q}%")).all()
+@router.post("/api/tweets/search", response_model=List[TweetRead])
+def search_tweets(request: SearchRequest, db: Session = Depends(get_db)):
+    tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{request.query}%")).all()
     if not tweets:
         raise HTTPException(status_code=404, detail="No tweets found")
     return tweets

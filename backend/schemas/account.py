@@ -2,6 +2,9 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import List, Optional
 
+class SearchRequest(BaseModel):
+    query: str
+
 class AccountBase(BaseModel):
     id: int
     username: str

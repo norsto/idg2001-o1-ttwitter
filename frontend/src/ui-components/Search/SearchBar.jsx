@@ -5,11 +5,7 @@ export default function SearchBar({ onSearch }) {
     const [query, setQuery] = useState('');
 
     const handleInputChange = (e) => {
-        const value = e.target.value;
-        setQuery(value);
-        if (value.trim()) {
-            onSearch(value); // Trigger search dynamically
-        }
+        setQuery(e.target.value);
     };
 
     const handleSearch = (e) => {
@@ -34,5 +30,3 @@ export default function SearchBar({ onSearch }) {
         </form>
     );
 }
-
-// TODO: idea for search logic still has to be implemented into the feed component
