@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 from .hashtag import hashtagRead
 from .media import MediaRead
-from .account import AccountRead
+from .account import AccountMinimal
 
 class TweetBase(BaseModel):
     content: str
@@ -16,7 +16,7 @@ class TweetCreate(TweetBase):
 class TweetRead(TweetBase):
     id: int
     created_at: datetime
-    account: AccountRead
+    account: AccountMinimal
     hashtags: List[hashtagRead] = []
     media: List[MediaRead] = []
     

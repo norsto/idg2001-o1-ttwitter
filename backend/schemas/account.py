@@ -3,24 +3,31 @@ from datetime import datetime
 from typing import List, Optional
 
 class AccountBase(BaseModel):
-    username: str
-    email: str
-    handle: str
-
-class AccountCreate(AccountBase):
-    password: str
-
-class AccountRead(AccountBase):
     id: int
-    created_at: datetime
-    tweets: List["TweetBase"] # <-- forward reference as a string
+    username: str
+    handle: str
 
     class Config:
         orm_mode = True
+
+class AccountMinimal(BaseModel):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class AccountCreate(AccountBase):
+    email: str
+    password: str
+
+class AccountRead(AccountBase):
+    email: str
+    created_at: datetime
+    tweets: List["TweetRead"] # <-- forward reference as a string
 
 class AccountCredentials(BaseModel):
     username: str
     password: str
 
-from backend.schemas.tweet import TweetBase  # <-- "lazy import" to avoid circular referencing
+from backend.schemas.tweet import TweetRead  # <-- "lazy import" to avoid circular referencing
 AccountRead.model_rebuild()
