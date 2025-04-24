@@ -1,15 +1,18 @@
 from pydantic import BaseModel
 from typing import List
 
-class hashtagBase(BaseModel):
+class SearchRequest(BaseModel):
+    query: str
+
+class HashtagBase(BaseModel):
     tag: str
 
-class hashtagCreate(hashtagBase):
+class HashtagCreate(HashtagBase):
     pass
 
-class hashtagRead(hashtagBase):
+class HashtagRead(HashtagBase):
     id: int
-    tweets: List[int] = [] # List of tweet IDs (e.g., ["1", "2", "3"]) 
+    tag: str
 
     class Config:
         orm_mode = True

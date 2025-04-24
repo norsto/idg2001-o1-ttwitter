@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from backend import database
 from backend.models import Tweet, Hashtag, Media, Account
-from backend.schemas import tweet, hashtag, media, account 
+from backend.schemas import tweet, media, account, SearchRequest, TweetRead, HashtagRead
 from backend.routes.account_routes import get_current_user
 from sqlalchemy.orm import joinedload
 
@@ -82,7 +82,7 @@ def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, d
     return tweet
 
 # Delete tweet
-@router.delete("/api/{account_id}/tweets/{tweet_id}", response_model=tweet.TweetRead)
+@router.delete("/api/{account_id}/tweets/{tweet_id}")
 def delete_tweets(account_id: int, tweet_id: int, db: Session = Depends(get_db), current_account: Account = Depends(get_current_user)):
 
     if current_account.id != account_id:
@@ -96,7 +96,7 @@ def delete_tweets(account_id: int, tweet_id: int, db: Session = Depends(get_db),
     db.delete(tweet)
     db.commit()
 
-    return tweet
+    return {"message": "Tweet Deleted"}
 
 #@app.get("/api/tweets", response_model=tweet.TweetRead)
 #def get_tweet_containing_text(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
@@ -108,13 +108,16 @@ def delete_tweets(account_id: int, tweet_id: int, db: Session = Depends(get_db),
 #    return tweets
 
 # Search based on hashtags
-@router.get("/api/hashtags", response_model=hashtag.hashtagRead)
-def get_hashtags(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
-    query = db.query(Hashtag)
+@router.post("/api/hashtags/search", response_model=List[HashtagRead])
+def search_hashtags(request: SearchRequest, db: Session = Depends(get_db)):
+    hashtags = db.query(Hashtag).filter(Hashtag.tag.ilike(f"%{request.query}%")).all()
+    if not hashtags:
+        raise HTTPException(status_code=404, detail="No hashtags found")
+    return hashtags
 
-    if q:
-        query = query.filter(func.lower(Hashtag.tag).ilike(f"%{q.lower()}%"))
-    
-    hashtags = query.all()
-
-    return [h.tag for h in hashtags] 
+@router.post("/api/tweets/search", response_model=List[TweetRead])
+def search_tweets(request: SearchRequest, db: Session = Depends(get_db)):
+    tweets = db.query(Tweet).filter(Tweet.content.ilike(f"%{request.query}%")).all()
+    if not tweets:
+        raise HTTPException(status_code=404, detail="No tweets found")
+    return tweets

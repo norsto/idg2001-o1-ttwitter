@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 import os
 from backend import database
 from backend.models import Account, Tweet, Hashtag, Media
-from backend.schemas.account import AccountRead, AccountCreate, AccountBase, AccountCredentials
+from backend.schemas.account import AccountRead, AccountCreate, AccountBase, AccountCredentials, SearchRequest
 from backend.schemas.tweet import TweetRead, TweetCreate, TweetUpdate, TweetBase
 from backend.schemas.media import MediaBase, MediaCreate, MediaRead
 from fastapi.security import OAuth2PasswordBearer
@@ -127,11 +127,14 @@ def get_all_accounts(db: Session = Depends(get_db)):
     ]
 
 # Search accounts
-@router.get("/api/accounts/search", response_model=List[AccountRead])
-def search_accounts(q: str, db: Session = Depends(get_db)):
-    return db.query(Account).filter(
-        Account.username.ilike(f"%{q}%") | Account.email.ilike(f"%{q}%")
+@router.post("/api/accounts/search", response_model=List[AccountRead])
+def search_accounts(request: SearchRequest, db: Session = Depends(get_db)):
+    accounts = db.query(Account).filter(
+        Account.username.ilike(f"%{request.query}%") | Account.email.ilike(f"%{request.query}%")
     ).all()
+    if not accounts:
+        raise HTTPException(status_code=404, detail="No accounts found")
+    return accounts
 
 # Get current logged-in user's data
 @router.get("/api/accounts/me", response_model=AccountRead)
@@ -143,14 +146,23 @@ def get_current_account(current_user: Account = Depends(get_current_user), db: S
     return user
 
 # Get account by username
-@router.get("/api/accounts/{account_name}", response_model=AccountRead)
-def get_account(account_name: str, db: Session = Depends(get_db)):
-    account = db.query(Account).filter(Account.username == account_name).first()
+@router.get("/api/accounts/{username}", response_model=AccountRead)
+def get_account(username: str, db: Session = Depends(get_db)):
+    account = db.query(Account).filter(Account.username == username).first()
 
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
     
-    return account
+    response = {
+        "id": account.id,
+        "username": account.username,
+        "email": account.email,
+        "handle": account.handle,
+        "created_at": account.created_at.isoformat(),
+        "tweets": [tweet.to_dict() for tweet in account.tweets]  # Use to_dict for tweets
+    }
+    print(response)
+    return response
 
 # Post tweet (requires authentication)
 @router.post("/api/tweets", response_model=TweetRead)
