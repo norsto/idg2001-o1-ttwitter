@@ -159,9 +159,18 @@ def get_account(username: str, db: Session = Depends(get_db)):
         "email": account.email,
         "handle": account.handle,
         "created_at": account.created_at.isoformat(),
-        "tweets": [tweet.to_dict() for tweet in account.tweets]  # Use to_dict for tweets
+        "tweets": [
+            {
+                **tweet.to_dict(),
+                "account": {
+                    "id": account.id,  # Only include the account ID
+                },
+                "hashtags": [hashtag.to_dict() for hashtag in tweet.hashtags],
+                "media": [media.to_dict() for media in tweet.media],
+            }
+            for tweet in account.tweets
+        ],
     }
-    print(response)
     return response
 
 # Post tweet (requires authentication)
