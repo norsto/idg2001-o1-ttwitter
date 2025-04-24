@@ -19,7 +19,9 @@ class AccountMinimal(BaseModel):
     class Config:
         orm_mode = True
 
-class AccountCreate(AccountBase):
+class AccountCreate(BaseModel):
+    username: str
+    handle: str
     email: str
     password: str
 

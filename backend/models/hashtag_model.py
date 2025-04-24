@@ -14,3 +14,9 @@ class Hashtag(Base):
         secondary=tweet_hashtag_table,
         back_populates="hashtags"
     )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "tag": self.tag
+        }
