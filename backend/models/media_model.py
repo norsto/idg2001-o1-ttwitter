@@ -11,3 +11,11 @@ class Media(Base):
     tweet_id = Column(Integer, ForeignKey("tweets.id"), nullable=False)
 
     tweet = relationship("Tweet", back_populates="media")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "url": self.url,
+            "media_type": self.media_type,
+            "tweet_id": self.tweet_id,
+        }
