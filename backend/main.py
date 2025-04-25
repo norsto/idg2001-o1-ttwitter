@@ -15,7 +15,7 @@ secret_key = os.getenv("SECRET_KEY")
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Erstatt "*" visst vi skal ha ett spesifikt domain (security measure for at andre applications ikkje kan bruke API'en)
+    allow_origins=["https://temu-twitter.onrender.com"], # Erstatt "*" visst vi skal ha ett spesifikt domain (security measure for at andre applications ikkje kan bruke API'en)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
