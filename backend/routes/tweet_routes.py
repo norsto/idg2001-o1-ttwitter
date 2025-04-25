@@ -68,6 +68,7 @@ def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, d
 
     # Update media
     if edit_tweet.media is not None:
+        tweet.media.clear()
         for m in tweet.media:
             db.delete(m)
         tweet.media = []
