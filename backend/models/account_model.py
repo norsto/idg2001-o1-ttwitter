@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime, event
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from backend.database import Base
+from database import Base
 
 class Account(Base):
     __tablename__ = 'accounts'

@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from zoneinfo import ZoneInfo
 from backend import database
-from backend.models import Account
+from models import Account
 from dotenv import load_dotenv
 import os
 

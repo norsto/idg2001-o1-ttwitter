@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from backend.database import Base
+from database import Base
 from .association_model import tweet_hashtag_table
 
 class Tweet(Base):
