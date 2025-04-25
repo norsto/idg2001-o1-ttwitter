@@ -1,6 +1,6 @@
 import uvicorn
-from backend.routes.account_routes import router as account_router
-from backend.routes.tweet_routes import router as tweet_router
+from routes.account_routes import router as account_router
+from routes.tweet_routes import router as tweet_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
