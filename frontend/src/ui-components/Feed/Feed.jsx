@@ -51,12 +51,17 @@ export default function Feed() {
             .catch(err => console.error('Error fetching accounts:', err));      
     }, []);    
 
-   
     function handleTweetSubmit(e) {
         e.preventDefault();
         const token = localStorage.getItem("token");
     
         if (!token || !tweetPost.trim()) return;
+    
+        // Extract hashtags from the tweet content
+        const hashtagList = tweetPost
+            .match(/#[a-zA-Z0-9_]+/g) // Match words starting with #
+            ?.map(tag => tag.slice(1)) // Remove the '#' symbol
+            || [];
     
         fetch('http://localhost:8000/api/tweets', {
             method: 'POST',
@@ -66,7 +71,7 @@ export default function Feed() {
             },
             body: JSON.stringify({
                 content: tweetPost,
-                hashtags: [],
+                hashtags: hashtagList,
                 media: []  
             })
         })
@@ -86,8 +91,7 @@ export default function Feed() {
             setTweetPost('');
         })
         .catch(err => console.error('Error posting tweet:', err));
-    } 
-
+    }
     
     function formatRelativeTime(timestamp) {
 
