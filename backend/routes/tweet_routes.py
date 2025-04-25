@@ -68,13 +68,15 @@ def edit_tweets(account_id: int, tweet_id: int, edit_tweet: tweet.TweetUpdate, d
 
     # Update media
     if edit_tweet.media is not None:
-        tweet.media.clear()
+        
         for m in tweet.media:
             db.delete(m)
-        tweet.media = []
+        db.flush()
+
+        tweet.media.clear()
 
         for url in edit_tweet.media:
-            new_media = Media(url=url, tweet=tweet)
+            new_media = Media(url=url, media_type="image", tweet=tweet)
             db.add(new_media)
 
     db.commit()
