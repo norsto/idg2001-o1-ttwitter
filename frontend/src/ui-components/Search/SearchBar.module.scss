@@ -10,10 +10,10 @@
         background-color: $background;
         border: 1px solid $border;
         transition: border-color 0.2s ease;
-    }
-
-    &:hover {
         cursor: pointer;
-        border-color: $text;
+
+        &:hover {
+            border-color: $text;
+        }
     }
 }
