@@ -18,14 +18,14 @@ export default function SearchBar({ onSearch }) {
     };
 
     return (
-        <form className={styles.searchBar} onSubmit={(e) => e.preventDefault()}>
+        <form className={styles.search} onSubmit={(e) => e.preventDefault()}>
             <input
                 type="text"
                 placeholder="Search"
                 value={query}
                 onChange={handleInputChange}
                 onKeyDown={handleSearch} // Listen for Enter key
-                className={styles.searchBar__input}
+                className={styles.search__input}
             />
         </form>
     );

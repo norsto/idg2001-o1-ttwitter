@@ -45,7 +45,7 @@ export default function SideFeed() {
 
     return (
         <div className={styles.SideFeed}>
-            <SearchBar onSearch={onSearch} />
+            <SearchBar className={styles.SideFeed__search} onSearch={onSearch} />
 
             <div className={styles.SideFeed__card}>
                 <h3 className={styles.SideFeed__card__header}>Search Results</h3>

@@ -1,1 +1,13 @@
-/*# sourceMappingURL=SearchBar.module.css.map */
+@import '../../assets/global-styles/app.css';
+.search__input {
+  border-radius: 30px;
+  padding: 0.5rem;
+  width: 99%;
+  background-color: #000000;
+  border: 1px solid rgba(101, 119, 134, 0.368627451);
+  transition: border-color 0.2s ease;
+}
+.search:hover {
+  cursor: pointer;
+  border-color: #e1e8ed;
+}/*# sourceMappingURL=SearchBar.module.css.map */
