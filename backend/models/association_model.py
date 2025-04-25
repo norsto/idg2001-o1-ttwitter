@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, ForeignKey
-from database import Base
+from ..database import Base
 
 tweet_hashtag_table = Table(
     'tweet_hashtag',

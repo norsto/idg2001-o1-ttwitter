@@ -2,14 +2,14 @@ from fastapi import FastAPI, HTTPException, Depends, Form, APIRouter
 from typing import List
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from auth import auth_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
+from ..database import SessionLocal
+from ..auth import auth_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from datetime import timedelta
 from jose import JWTError, jwt
 from dotenv import load_dotenv
 import os
 
-from models import Account, Tweet, Hashtag, Media
+from ..models import Account, Tweet, Hashtag, Media
 from schemas.account import AccountRead, AccountCreate, AccountBase, AccountCredentials, SearchRequest
 from schemas.tweet import TweetRead, TweetCreate, TweetUpdate, TweetBase
 from schemas.media import MediaBase, MediaCreate, MediaRead

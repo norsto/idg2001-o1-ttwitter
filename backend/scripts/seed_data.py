@@ -6,8 +6,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..',
 import random
 from faker import Faker
 from sqlalchemy.orm import Session
-from backend.database import SessionLocal, engine, Base
-from backend.models import Account, Tweet, Hashtag, Media
+from ..database import SessionLocal, engine, Base
+from ..models import Account, Tweet, Hashtag, Media
 
 # --- Setup
 fake = Faker()

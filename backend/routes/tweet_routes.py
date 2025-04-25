@@ -7,10 +7,10 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from database import SessionLocal
-from models import Tweet, Hashtag, Media, Account
+from .. import database
+from ..models import Tweet, Hashtag, Media, Account
 from schemas import tweet, media, account, SearchRequest, TweetRead, HashtagRead
-from routes.account_routes import get_current_user
+from .account_routes import get_current_user
 from sqlalchemy.orm import joinedload
 
 router = APIRouter()

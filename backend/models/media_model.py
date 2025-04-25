@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from database import Base
+from ..database import Base
 
 class Media(Base):
     __tablename__ = "media"

@@ -34,5 +34,5 @@ class AccountCredentials(BaseModel):
     username: str
     password: str
 
-from backend.schemas.tweet import TweetRead  # <-- "lazy import" to avoid circular referencing
+from .tweet import TweetRead  # <-- "lazy import" to avoid circular referencing
 AccountRead.model_rebuild()
